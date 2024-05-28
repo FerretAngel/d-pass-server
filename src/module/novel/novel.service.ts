@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNovelDto } from './dto/create-novel.dto';
-import { UpdateNovelDto } from './dto/update-novel.dto';
+import { BaseService } from 'src/baseModule/baseService';
+import { Novel } from './entities/novel.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { NovelContent } from './entities/novelContent.entity';
+import { UserService } from '../user/user.service';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
-export class NovelService {
-  create(createNovelDto: CreateNovelDto) {
-    return 'This action adds a new novel';
+export class NovelService extends BaseService<Novel> {
+  constructor(
+    @InjectRepository(Novel)
+    private readonly novelRepository: Repository<Novel>,
+    private readonly userSerivce: UserService,
+    private readonly emailService: EmailService,
+  ) {
+    super(novelRepository);
   }
+}
 
-  findAll() {
-    return `This action returns all novel`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} novel`;
-  }
-
-  update(id: number, updateNovelDto: UpdateNovelDto) {
-    return `This action updates a #${id} novel`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} novel`;
+@Injectable()
+export class NovelContentService extends BaseService<NovelContent>{
+  constructor(
+    @InjectRepository(NovelContent)
+    private readonly novelContentRepository: Repository<NovelContent>,
+    private readonly novelService: NovelService,
+    private readonly userService: UserService,
+    private readonly emailService: EmailService,
+  ) {
+    super(novelContentRepository);
   }
 }
