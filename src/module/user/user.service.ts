@@ -47,14 +47,12 @@ export class UserService extends BaseService<User> {
   /**
    * 用户注册
    */
-  async register(createUserDto: CreateUserDto) {
-    const { name, email, fingerprint } = createUserDto;
+  async register(fingerprint: string, createUserDto: CreateUserDto) {
+    const { name, email } = createUserDto;
     // 验证用户昵称
-    if (name && this.checkUserName(name)) {
-    }
+    name && this.checkUserName(name);
     // 验证邮箱
-    if (email && this.checkEmail(email)) {
-    }
+    email && this.checkEmail(email);
     const user = await this.userRepository.findOne({
       where: {
         fingerprint: Like(`%${fingerprint}%`),
@@ -94,22 +92,37 @@ export class UserService extends BaseService<User> {
       ],
     });
   }
-  async confirmEmail(email: string) {
+  async confirmEmail(fingerprint: string, email: string) {
     const { APP_HOST, SSL, BASE_URL } = process.env;
-    const url = `http${SSL ? 's' : ''}://${APP_HOST}/${BASE_URL ? BASE_URL + '/' : ''}email/`;
+    this.checkEmail(email);
+    const url = `http${SSL === 'true' ? 's' : ''}://${APP_HOST}/${BASE_URL ? BASE_URL + '/' : ''}user/bindEmail?fingerprint=${encodeURIComponent(fingerprint)}&email=${encodeURIComponent(email)}`;
     const sendEmailDto: SendMailDto = {
       to: email,
-      title: '邮箱验证',
-      from: 'D-PASS',
+      title: 'D-PASS邮箱验证',
       text: `
-      您正在订阅D-pass推送服务，如果不是您本人操作，请忽略此邮件。
-      <a herf="${btoa(encodeURIComponent(url))}">点击验证邮箱</a>
+      <h3>您正在订阅D-pass推送服务，如果不是您本人操作，请忽略此邮件。</h3>
+      <a herf="${url}">点击验证邮箱</a>
       `,
     };
     this.emailService.sendEmail(sendEmailDto);
   }
-  async bindEmail(id: number, email: string) {
+  async bindEmail(fingerprint: string, email: string) {
     this.checkEmail(email);
-    return this.update(id, { email, subscribe: true });
+    const user = await this.findByFinger(fingerprint);
+    if (!user) throw new Error('用户不存在');
+    return this.update(user.id, { email, subscribe: true });
+  }
+  async addFingerPrintByUid(id: number, fingerprint: string) {
+    const user = await this.findById(id);
+    if (!user) throw new Error('用户不存在');
+    user.fingerprint = fingerprint;
+    return this.update(id, user);
+  }
+
+  async checkAdmin(fingerprint: string) {
+    const user = await this.findByFinger(fingerprint);
+    if (!user) throw new Error('用户不存在');
+    if (user.level !== 2) throw new Error('权限不足，无法操作');
+    return true;
   }
 }

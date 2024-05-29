@@ -8,9 +8,10 @@ import {
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/guards/access-token.guard';
+import { IS_ADMIN_KEY, IS_PUBLIC_KEY } from 'src/guards/access-token.guard';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Redis } from 'ioredis';
+import { UserService } from '../user/user.service';
 export const REQUEST_USER_KEY = 'user';
 export const FINGER_KEY = 'fingerprint';
 @Injectable()
@@ -19,15 +20,20 @@ export class AccessTokenGuard implements CanActivate {
     private readonly reflector: Reflector,
     @InjectRedis()
     private readonly redis: Redis,
+    private readonly userService: UserService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
     if (isPublic) return true;
+    const isAdmin = this.reflector.get(IS_ADMIN_KEY, context.getHandler());
+
     const request = context.switchToHttp().getRequest();
     // 从请求中获取指纹信息
     const fingerprint = this.getFingerPrint(request);
-    console.log(fingerprint);
+
+    // 管理员权限校验
+    isAdmin && await this.userService.checkAdmin(fingerprint);
 
     if (!fingerprint) throw new UnauthorizedException('请先登录');
     request[REQUEST_USER_KEY] = { fingerprint };
@@ -35,7 +41,7 @@ export class AccessTokenGuard implements CanActivate {
   }
   private getFingerPrint(request: Request): string {
     const { headers, query } = request;
-    if (Object.hasOwnProperty.call(headers,FINGER_KEY)){
+    if (Object.hasOwnProperty.call(headers, FINGER_KEY)) {
       return headers[FINGER_KEY] as string;
     }
     return query[FINGER_KEY] as string;

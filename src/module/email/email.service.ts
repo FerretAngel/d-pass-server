@@ -7,13 +7,9 @@ export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
   async sendEmail(sendEmailDto: SendMailDto) {
     this.lastSendTime = Date.now();
-    return this.mailerService
-      .sendMail({
-        ...sendEmailDto,
-        subject: sendEmailDto.title,
-      })
-      .catch((err) => {
-        throw new Error(err.message);
-      });
+    return this.mailerService.sendMail({
+      ...sendEmailDto,
+      subject: sendEmailDto.title,
+    });
   }
 }

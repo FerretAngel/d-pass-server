@@ -8,21 +8,23 @@ export class BaseService<T extends BaseEntity> {
     return this.repository.save(createDto as any);
   }
   async findById(id: number) {
-    if (!id) throw new Error('id is required');
+    if (!id) throw new Error('id不存在');
     return this.repository.findOne({ where: { id: id as any } });
   }
   async findByIds(ids: number[]) {
     return this.repository.findBy({ id: In(ids) as any });
   }
   async update(id: number, updateDto: Partial<T>) {
-    if (!id) throw new Error('id is required');
+    if (!id) throw new Error('id不存在');
     const old = await this.findById(id);
-    if (!old) throw new Error('not found');
+    if (!old) throw new Error('数据不存在');
+    // 如果含有id则删除
+    if (Object.hasOwnProperty.call(updateDto, 'id')) delete updateDto.id;
     Object.assign(old, updateDto);
     return this.repository.update(id, old as any);
   }
   async remove(id: number) {
-    if (!id) throw new Error('id is required');
+    if (!id) throw new Error('id不存在');
     return this.repository.softDelete(id);
   }
   generateParams(
@@ -63,8 +65,13 @@ export class BaseService<T extends BaseEntity> {
     const sql = this.generateQuerySql(temp[0], temp[1]);
     // 查询
     const [data, total] = await queryBuilder
-      .cache(sql, +process.env.DB_CACHE_TIME)
+      .cache(sql, parseInt(process.env.DB_CACHE_TIME || '3000'))
       .getManyAndCount();
     return baseQuery.getReturn(data, total);
+  }
+
+  async queryAll() {
+    const list = await this.repository.find();
+    return new BaseQuery().getReturn(list, list.length);
   }
 }

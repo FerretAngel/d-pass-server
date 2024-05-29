@@ -29,4 +29,15 @@ export class User extends BaseEntity {
   describe: string;
 }
 
-export const UserKeys = Object.keys(new User()) as Array<keyof User>;
+export const UserKeys: Array<keyof User> = [
+  'id',
+  'name',
+  'username',
+  'email',
+  'phone',
+  'fingerprint',
+  'level',
+  'subscribe',
+  'avatar',
+  'describe',
+];

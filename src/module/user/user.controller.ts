@@ -4,8 +4,8 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Request,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,9 +16,19 @@ import { REQUEST_USER_KEY, FINGER_KEY } from '../auth/access-token.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Post('register')
+  async register(@Request() req: any, @Body() createUserDto: CreateUserDto) {
+    const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
+    if (!fingerprint) throw new Error('未获取到浏览器指纹');
+    return this.userService.register(fingerprint, createUserDto);
+  }
+
+  @Patch()
+  async update(@Request() req: any, @Body() updateUserDto: UpdateUserDto) {
+    const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
+    if (!fingerprint) throw new Error('未获取到浏览器指纹');
+    const user = await this.userService.findByFinger(fingerprint);
+    return this.userService.updateUserInfo(user.id, updateUserDto);
   }
   @Post('bindEmail')
   async sendBindEmail(
@@ -27,14 +37,16 @@ export class UserController {
   ) {
     const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
     if (!fingerprint) throw new Error('未获取到浏览器指纹');
-    const user = await this.userService.findByFinger(fingerprint);
-    if (!user) throw new Error('未找到用户');
-    return this.userService.bindEmail(user.id, sendMailDto.email);
+    return this.userService.confirmEmail(fingerprint, sendMailDto.email);
   }
 
   @Get('bindEmail')
-  async bindEmail(@Param('id') id: string, @Param('email') email: string) {
-    await this.userService.bindEmail(+id, email);
-    return `<h1>绑定成功:${email}</h1>`;
+  async bindEmail(@Request() req: any, @Query('email') email: string) {
+    let { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
+    if (!fingerprint) throw new Error('未获取到浏览器指纹');
+    fingerprint = decodeURIComponent(fingerprint);
+    email = decodeURIComponent(email);
+    await this.userService.bindEmail(fingerprint, email);
+    return `绑定成功:${email}`;
   }
 }

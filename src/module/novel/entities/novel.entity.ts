@@ -1,5 +1,7 @@
 import { Entity, Column } from 'typeorm';
 import { BaseEntity } from 'src/baseModule/baseEntity';
+import { User } from 'src/module/user/entities/user.entity';
+import { Role } from 'src/module/role/entities/role.entity';
 @Entity({
   name: 'novel',
   orderBy: {
@@ -15,4 +17,10 @@ export class Novel extends BaseEntity {
   avatar: string; // 封面
   @Column({ default: null })
   describe: string; // 描述
+  @Column()
+  tags: string; // 标签
+  auth?: User; // 作者实体
+  roles?: Role[]; // 角色实体
 }
+
+

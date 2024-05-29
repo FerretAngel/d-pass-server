@@ -33,6 +33,7 @@ export class BaseQuery<T = any> {
     return str;
   }
 
+
   removeParams(key: keyof T) {
     const value = this.queryParams[key];
     delete this.queryParams[key];
@@ -54,4 +55,9 @@ export class BaseQuery<T = any> {
       list: data,
     };
   }
+}
+
+export function initQueryPage(queryParam: any) {
+  const { page, pageSize, isOr, ...params } = queryParam;
+  return new BaseQuery(page, pageSize, isOr, params);
 }

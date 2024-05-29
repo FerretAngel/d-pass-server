@@ -11,6 +11,9 @@ import { MulterModule } from '@nestjs/platform-express';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './module/auth/access-token.guard';
+import { ContentModule } from './module/content/content.module';
+import { RoleModule } from './module/role/role.module';
+import { FileModule } from './module/file/file.module';
 @Module({
   imports: [
     ...APPModule,
@@ -20,11 +23,18 @@ import { AccessTokenGuard } from './module/auth/access-token.guard';
     AuthModule,
     NovelModule,
     UserModule,
+    ContentModule,
+    RoleModule,
+    FileModule,
   ],
   controllers: [AppController],
-  providers: [AppService, Exception,{
-    provide: APP_GUARD,
-    useClass: AccessTokenGuard,
-  },],
+  providers: [
+    AppService,
+    Exception,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+  ],
 })
 export class AppModule {}
