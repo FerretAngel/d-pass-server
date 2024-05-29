@@ -9,7 +9,7 @@ import { CreateNovelDto } from './dto/create-novel.dto';
 import { UpdateNovelDto } from './dto/update-novel.dto';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/entities/role.entity';
-
+import { Token, marked } from 'marked';
 @Injectable()
 export class NovelService extends BaseService<Novel> {
   constructor(
@@ -27,8 +27,10 @@ export class NovelService extends BaseService<Novel> {
     const { name } = createNovelDto;
     const user = await this.userService.findByFinger(fingerprint);
     if (!user) throw new Error('未找到用户');
-    const novel = this.novelRepository.findOne({ where: { name } });
-    if (novel) throw new Error('小说名称已存在');
+    const novel = await this.novelRepository.findOne({ where: { name } });
+    console.log(novel);
+
+    if (novel) throw new Error('小说名称已存在:' + name);
     return this.create({
       ...createNovelDto,
       author: user.id,
@@ -86,4 +88,9 @@ export class NovelService extends BaseService<Novel> {
     });
     return res;
   }
+  findByName(name: string) {
+    return this.novelRepository.findOne({ where: { name } });
+  }
+
+  
 }

@@ -8,15 +8,14 @@ import { User } from 'src/module/user/entities/user.entity';
   },
 })
 export class Content extends BaseEntity {
-  @Column()
+  @Column({ default: 1 })
   author: number; // 作者
-  auth?: User; // 作者实体
   @Column({ default: '' })
   title: string; // 标题
-  @Column({ type: 'text' })
+  @Column({ type: 'text', select: false })
   content: string; // 内容
   @Column()
-  novelId: number; // 小说id
+  novel: number; // 小说id
   @Column({ default: false })
   news: boolean; // 是否是新闻
 }

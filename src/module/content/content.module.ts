@@ -9,5 +9,6 @@ import { NovelModule } from '../novel/novel.module';
   imports: [TypeOrmModule.forFeature([Content]), NovelModule],
   controllers: [ContentController],
   providers: [ContentService],
+  exports: [ContentService],
 })
 export class ContentModule {}

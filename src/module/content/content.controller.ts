@@ -17,6 +17,7 @@ import { BaseQuery } from 'src/baseModule/baseQuery';
 export class ContentController {
   constructor(private readonly contentService: ContentService) {}
 
+
   @Post()
   @Admin()
   create(@Body() createContentDto: CreateContentDto) {
@@ -27,6 +28,12 @@ export class ContentController {
   @Public()
   findAll(@Body() query: BaseQuery) {
     return this.contentService.query(query);
+  }
+
+  @Get(':id')
+  @Public()
+  findOne(@Param('id') id: string) {
+    return this.contentService.findOne(+id);
   }
 
   @Patch(':id')
