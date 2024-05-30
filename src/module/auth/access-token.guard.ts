@@ -9,17 +9,15 @@ import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
 import { IS_ADMIN_KEY, IS_PUBLIC_KEY } from 'src/guards/access-token.guard';
-import { InjectRedis } from '@nestjs-modules/ioredis';
-import { Redis } from 'ioredis';
 import { UserService } from '../user/user.service';
+import { LogService } from '../log/log.service';
 export const REQUEST_USER_KEY = 'user';
 export const FINGER_KEY = 'fingerprint';
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    @InjectRedis()
-    private readonly redis: Redis,
+    private readonly logService: LogService,
     private readonly userService: UserService,
   ) {}
 

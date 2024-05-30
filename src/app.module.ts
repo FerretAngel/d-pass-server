@@ -15,11 +15,13 @@ import { ContentModule } from './module/content/content.module';
 import { RoleModule } from './module/role/role.module';
 import { FileModule } from './module/file/file.module';
 import { VolumeModule } from './module/volume/volume.module';
+import { LogModule } from './module/log/log.module';
 @Module({
   imports: [
     ...APPModule,
     MulterModule.register(),
     JwtModule.register({}),
+    LogModule,
     EmailModule,
     AuthModule,
     NovelModule,

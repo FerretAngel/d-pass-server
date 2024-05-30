@@ -10,6 +10,7 @@ import { UpdateNovelDto } from './dto/update-novel.dto';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/entities/role.entity';
 import { Token, marked } from 'marked';
+import { AppService } from 'src/app.service';
 @Injectable()
 export class NovelService extends BaseService<Novel> {
   constructor(
@@ -91,6 +92,4 @@ export class NovelService extends BaseService<Novel> {
   findByName(name: string) {
     return this.novelRepository.findOne({ where: { name } });
   }
-
-  
 }

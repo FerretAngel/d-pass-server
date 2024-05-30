@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { EmailService } from 'src/module/email/email.service';
+import { LogService } from 'src/module/log/log.service';
 import { QueryFailedError } from 'typeorm';
 
 type ExecptionType =
@@ -86,7 +87,7 @@ function getStatusAndMessage(exception: ExecptionType) {
 
 @Catch()
 export class Exception implements ExceptionFilter {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(private readonly logService: LogService) {}
   catch(exception: ExecptionType, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -95,5 +96,6 @@ export class Exception implements ExceptionFilter {
       code,
       message,
     });
+    this.logService.error(message);
   }
 }
