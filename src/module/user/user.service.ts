@@ -112,11 +112,15 @@ export class UserService extends BaseService<User> {
     if (!user) throw new Error('用户不存在');
     return this.update(user.id, { email, subscribe: true });
   }
-  async addFingerPrintByUid(id: number, fingerprint: string) {
-    const user = await this.findById(id);
+  async addFingerPrintByUid(oldFInger: string, fingerprint: string) {
+    const user = await this.findByFinger(oldFInger);
     if (!user) throw new Error('用户不存在');
-    user.fingerprint = fingerprint;
-    return this.update(id, user);
+    const fingers = user.fingerprint.split(',');
+    if (fingers.includes(fingerprint)) throw new Error('指纹已存在');
+    fingers.push(fingerprint);
+    if (fingers.length > 5) fingers.shift();
+    user.fingerprint = fingers.join(',');
+    return this.update(user.id, user);
   }
 
   async checkAdmin(fingerprint: string) {

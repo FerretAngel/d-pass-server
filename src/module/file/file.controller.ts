@@ -12,7 +12,6 @@ import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Admin, Public } from 'src/guards/access-token.guard';
 import * as mammoth from 'mammoth';
-import { marked, type Token } from 'marked';
 import { ContentService } from '../content/content.service';
 import { NovelService } from '../novel/novel.service';
 @Controller('file')

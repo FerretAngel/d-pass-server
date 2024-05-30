@@ -14,6 +14,7 @@ import { AccessTokenGuard } from './module/auth/access-token.guard';
 import { ContentModule } from './module/content/content.module';
 import { RoleModule } from './module/role/role.module';
 import { FileModule } from './module/file/file.module';
+import { VolumeModule } from './module/volume/volume.module';
 @Module({
   imports: [
     ...APPModule,
@@ -26,6 +27,7 @@ import { FileModule } from './module/file/file.module';
     ContentModule,
     RoleModule,
     FileModule,
+    VolumeModule,
   ],
   controllers: [AppController],
   providers: [

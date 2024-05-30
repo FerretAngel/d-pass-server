@@ -31,11 +31,11 @@ export class AccessTokenGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     // 从请求中获取指纹信息
     const fingerprint = this.getFingerPrint(request);
+    if (!fingerprint) throw new UnauthorizedException('请先登录');
 
     // 管理员权限校验
-    isAdmin && await this.userService.checkAdmin(fingerprint);
-
-    if (!fingerprint) throw new UnauthorizedException('请先登录');
+    isAdmin && (await this.userService.checkAdmin(fingerprint));
+    
     request[REQUEST_USER_KEY] = { fingerprint };
     return true;
   }

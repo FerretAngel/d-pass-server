@@ -49,4 +49,13 @@ export class UserController {
     await this.userService.bindEmail(fingerprint, email);
     return `绑定成功:${email}`;
   }
+
+  @Post('addFinger')
+  async addFinger(@Request() req: any, @Body() body: { fingerprint: string }) {
+    const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
+    if (!fingerprint) throw new Error('未获取到浏览器指纹');
+    const { fingerprint: finger } = body;
+    if (!finger) throw new Error('未获取到浏览器指纹:fingerprint');
+    return this.userService.addFingerPrintByUid(fingerprint, finger);
+  }
 }

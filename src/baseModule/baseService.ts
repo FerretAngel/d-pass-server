@@ -60,6 +60,7 @@ export class BaseService<T extends BaseEntity> {
       .take(baseQuery.take)
       .orderBy('createTime', 'DESC');
     this.generateParams(queryBuilder, baseQuery.queryParams, isOr);
+    
     // 缓存
     const temp = queryBuilder.getQueryAndParameters();
     const sql = this.generateQuerySql(temp[0], temp[1]);

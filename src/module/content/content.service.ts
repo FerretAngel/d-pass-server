@@ -23,16 +23,13 @@ export class ContentService extends BaseService<Content> {
       .where('content.id = :id', { id })
       .getOne();
   }
-  parseContent(content: string): {
-    contents: Array<{ title: string; content: string }>;
-    others: Array<Token>;
-  } {
+  parseContent(content: string) {
     const result = marked.lexer(content);
     let lastTitleIndex = result.findIndex(
       (token) => token.type === 'heading' && token.depth === 3,
     );
     const others = result.slice(0, lastTitleIndex);
-    const contents = [];
+    const contents = new Array<{ title: string; content: string }>();
     while (lastTitleIndex < result.length) {
       let nextTitleIndex = result
         .slice(lastTitleIndex + 1)
