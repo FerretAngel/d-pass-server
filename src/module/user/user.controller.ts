@@ -11,12 +11,13 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { REQUEST_USER_KEY, FINGER_KEY } from '../auth/access-token.guard';
+import { Admin } from 'src/guards/access-token.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('register')
+  @Post()
   async register(@Request() req: any, @Body() createUserDto: CreateUserDto) {
     const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
     if (!fingerprint) throw new Error('未获取到浏览器指纹');
@@ -57,5 +58,10 @@ export class UserController {
     const { fingerprint: finger } = body;
     if (!finger) throw new Error('未获取到浏览器指纹:fingerprint');
     return this.userService.addFingerPrintByUid(fingerprint, finger);
+  }
+  @Get('admin')
+  @Admin()
+  admin() {
+    return true;
   }
 }

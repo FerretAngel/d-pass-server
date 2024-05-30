@@ -40,4 +40,6 @@ export class VolumeController {
   remove(@Param('id') id: string) {
     return this.volumeService.remove(+id);
   }
+
+  
 }
