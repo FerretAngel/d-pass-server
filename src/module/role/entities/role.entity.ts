@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/baseModule/baseEntity';
+import { Belong } from 'src/module/belong/entities/belong.entity';
 import { Column, Entity } from 'typeorm';
 @Entity({
   name: 'roles',
@@ -7,30 +8,31 @@ import { Column, Entity } from 'typeorm';
   },
 })
 export class Role extends BaseEntity {
-  @Column({ default: null })
+  @Column()
   novel: number; // 小说id
   @Column({ default: '默认角色' })
   name: string; // 角色名称
-  @Column({ default: null })
+  @Column()
   avatar: string; // 头像
-  @Column({ default: null })
+  @Column()
   drawing: string; // 画像
-  @Column({ default: null })
+  @Column()
   age: number; // 年龄
-  @Column({ default: null })
+  @Column()
   sex: string; // 性别
-  @Column({ default: null })
+  @Column()
   height: number; // 身高
-  @Column({ default: null })
+  @Column()
   weight: number; // 体重
-  @Column({ default: null })
+  @Column()
   describe: string; // 描述
-  @Column({ default: null })
-  belong: string; // 所属
-  @Column({ default: null })
+  @Column()
+  belongId: number; // 所属
+  belong?: Belong;
+  @Column()
   hobby: string; // 爱好
-  @Column({ default: null })
+  @Column()
   ability: string; // 能力
-  @Column({ default: null })
+  @Column()
   occupation: string; // 职业
 }

@@ -1,4 +1,6 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Belong } from 'src/module/belong/entities/belong.entity';
+import { Comic } from 'src/module/comic/entities/comic.entity';
 import { Content } from 'src/module/content/entities/content.entity';
 import { Log } from 'src/module/log/log.entity';
 import { Novel } from 'src/module/novel/entities/novel.entity';
@@ -13,6 +15,6 @@ export default TypeOrmModule.forRoot({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [User, Novel, Content,Role,Volume,Log],
+  entities: [User, Novel, Content, Role, Volume, Log, Belong, Comic],
   synchronize: true,
 });

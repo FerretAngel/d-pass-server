@@ -18,4 +18,6 @@ export class Content extends BaseEntity {
   novel: number; // 小说id
   @Column({ default: false })
   news: boolean; // 是否是新闻
+  @Column()
+  avatar: string; // 封面
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 
 export class CreateContentDto {
   @IsNotEmpty({ message: '小说标题不能为空：title' })
@@ -7,4 +7,6 @@ export class CreateContentDto {
   content: string;
   @IsNotEmpty({ message: '小说id不能为空' })
   novel: number;
+  news?: boolean;
+  avatar?: string;
 }
