@@ -6,7 +6,7 @@ import { Role } from './entities/role.entity';
 import { BelongModule } from '../belong/belong.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Role]), BelongModule],
+  imports: [TypeOrmModule.forFeature([Role]),BelongModule],
   controllers: [RoleController],
   providers: [RoleService],
   exports: [RoleService],

@@ -8,6 +8,6 @@ import { Belong } from './entities/belong.entity';
   imports:[TypeOrmModule.forFeature([Belong])],
   controllers: [BelongController],
   providers: [BelongService],
-  exports: [BelongService],
+  exports: [BelongService]
 })
 export class BelongModule {}

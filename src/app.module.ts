@@ -17,6 +17,7 @@ import { FileModule } from './module/file/file.module';
 import { VolumeModule } from './module/volume/volume.module';
 import { LogModule } from './module/log/log.module';
 import { BelongModule } from './module/belong/belong.module';
+import { ComicModule } from './module/comic/comic.module';
 @Module({
   imports: [
     ...APPModule,
@@ -32,6 +33,7 @@ import { BelongModule } from './module/belong/belong.module';
     FileModule,
     VolumeModule,
     BelongModule,
+    ComicModule,
   ],
   controllers: [AppController],
   providers: [

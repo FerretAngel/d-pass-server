@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { UpdateBelongDto } from './dto/update-belong.dto';
 import { BaseService } from 'src/baseModule/baseService';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Belong } from './entities/belong.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()

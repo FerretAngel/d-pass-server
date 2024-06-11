@@ -12,6 +12,7 @@ import { BelongService } from './belong.service';
 import { CreateBelongDto } from './dto/create-belong.dto';
 import { UpdateBelongDto } from './dto/update-belong.dto';
 import { BaseQuery, initQueryPage } from 'src/baseModule/baseQuery';
+import { Public } from 'src/guards/access-token.guard';
 
 @Controller('belong')
 export class BelongController {
@@ -23,7 +24,8 @@ export class BelongController {
   }
 
   @Get()
-  query(@Query() query: BaseQuery) {
+  @Public()
+  findAll(@Query() query: BaseQuery) {
     return this.belongService.query(initQueryPage(query));
   }
 

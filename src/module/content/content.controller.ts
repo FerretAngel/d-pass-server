@@ -21,6 +21,8 @@ export class ContentController {
   @Post()
   @Admin()
   create(@Body() createContentDto: CreateContentDto) {
+    const { news, avatar } = createContentDto;
+    if (news && !avatar) throw new Error('咨询必须有封面');
     return this.contentService.create(createContentDto);
   }
 

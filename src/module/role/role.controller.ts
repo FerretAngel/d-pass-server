@@ -23,6 +23,12 @@ export class RoleController {
     return this.roleService.query(initQueryPage(query));
   }
 
+  @Get(':id')
+  @Public()
+  findOne(@Param('id') id: string) {
+    return this.roleService.findByNovelIds([+id]);
+  }
+
   @Post()
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.roleService.create(createRoleDto);
