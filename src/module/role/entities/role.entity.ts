@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/baseModule/baseEntity';
+import { Belong } from 'src/module/belong/entities/belong.entity';
 import { Column, Entity } from 'typeorm';
 @Entity({
   name: 'roles',
@@ -26,7 +27,8 @@ export class Role extends BaseEntity {
   @Column({ default: null })
   describe: string; // 描述
   @Column({ default: null })
-  belong: string; // 所属
+  belongId: number; // 所属区域ID
+  belong?: Belong;
   @Column({ default: null })
   hobby: string; // 爱好
   @Column({ default: null })

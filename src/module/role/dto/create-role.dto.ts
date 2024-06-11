@@ -12,7 +12,7 @@ export class CreateRoleDto {
   height?: number; // 身高
   weight?: number; // 体重
   describe?: string; // 描述
-  belong?: string; // 所属
+  belongId?: number; // 所属
   hobby?: string; // 爱好
   ability?: string; // 能力
   occupation?: string; // 职业

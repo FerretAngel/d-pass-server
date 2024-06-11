@@ -16,6 +16,7 @@ import { RoleModule } from './module/role/role.module';
 import { FileModule } from './module/file/file.module';
 import { VolumeModule } from './module/volume/volume.module';
 import { LogModule } from './module/log/log.module';
+import { BelongModule } from './module/belong/belong.module';
 @Module({
   imports: [
     ...APPModule,
@@ -30,6 +31,7 @@ import { LogModule } from './module/log/log.module';
     RoleModule,
     FileModule,
     VolumeModule,
+    BelongModule,
   ],
   controllers: [AppController],
   providers: [

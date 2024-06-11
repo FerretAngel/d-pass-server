@@ -7,4 +7,5 @@ export class CreateContentDto {
   content: string;
   @IsNotEmpty({ message: '小说id不能为空' })
   novel: number;
+  news?:boolean;
 }
