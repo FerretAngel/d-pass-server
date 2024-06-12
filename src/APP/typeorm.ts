@@ -17,4 +17,10 @@ export default TypeOrmModule.forRoot({
   database: process.env.DB_DATABASE,
   entities: [User, Novel, Content, Role, Volume, Log, Belong, Comic],
   synchronize: true,
+  cache: {
+    type: 'ioredis',
+    options: {
+      url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+    },
+  },
 });

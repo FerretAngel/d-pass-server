@@ -3,10 +3,12 @@ export class BaseQuery<T = any> {
   pageSize: number = 10;
   isOr: boolean = false;
   queryParams: Partial<T>;
+  querySelect: string[] = [];
   constructor(
     page: string | number = '1',
     pageSize: string | number = '10',
     isOr = false,
+    select?: string[],
     param?: Partial<T>,
   ) {
     if (typeof page === 'string') this.page = parseInt(page);
@@ -14,6 +16,7 @@ export class BaseQuery<T = any> {
     if (typeof pageSize === 'string') this.pageSize = parseInt(pageSize);
     else this.pageSize = pageSize;
     this.queryParams = param;
+    this.querySelect = select;
     this.isOr = isOr;
     if (this.page < 1) this.page = 1;
     if (this.pageSize < 1) this.pageSize = 1;
@@ -32,7 +35,6 @@ export class BaseQuery<T = any> {
     )}-${this.isOr}`;
     return str;
   }
-
 
   removeParams(key: keyof T) {
     const value = this.queryParams[key];
@@ -58,6 +60,6 @@ export class BaseQuery<T = any> {
 }
 
 export function initQueryPage(queryParam: any) {
-  const { page, pageSize, isOr, ...params } = queryParam;
-  return new BaseQuery(page, pageSize, isOr, params);
+  const { page, pageSize, isOr, select, ...params } = queryParam;
+  return new BaseQuery(page, pageSize, isOr, select?.split(','), params);
 }

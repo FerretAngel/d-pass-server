@@ -9,8 +9,6 @@ import { CreateNovelDto } from './dto/create-novel.dto';
 import { UpdateNovelDto } from './dto/update-novel.dto';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/entities/role.entity';
-import { Token, marked } from 'marked';
-import { AppService } from 'src/app.service';
 @Injectable()
 export class NovelService extends BaseService<Novel> {
   constructor(
@@ -29,8 +27,6 @@ export class NovelService extends BaseService<Novel> {
     const user = await this.userService.findByFinger(fingerprint);
     if (!user) throw new Error('未找到用户');
     const novel = await this.novelRepository.findOne({ where: { name } });
-    console.log(novel);
-
     if (novel) throw new Error('小说名称已存在:' + name);
     return this.create({
       ...createNovelDto,
@@ -58,6 +54,7 @@ export class NovelService extends BaseService<Novel> {
    */
   async queryNovel(query: BaseQuery) {
     const res = await this.query(query);
+    if (query.querySelect && !query.querySelect.includes('roles')) return res;
     let uidSet = new Set<number>();
     let novelIdSet = new Set<number>();
     res.list.forEach((item) => {
@@ -91,5 +88,17 @@ export class NovelService extends BaseService<Novel> {
   }
   findByName(name: string) {
     return this.novelRepository.findOne({ where: { name } });
+  }
+
+  async getTags() {
+    const res = await this.novelRepository.find({
+      select: ['tags'],
+    });
+    let tagsSet = new Set<string>();
+    res.forEach((item) => {
+      const { tags } = item;
+      tags.split(',').forEach((tag) => tagsSet.add(tag));
+    });
+    return Array.from(tagsSet);
   }
 }

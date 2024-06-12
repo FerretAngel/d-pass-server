@@ -1,8 +1,7 @@
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateRoleDto {
-  @IsNotEmpty({ message: '小说id不能为空:novel' })
-  @IsNumber({}, { message: '小说id必须是数字' })
+  @IsNotEmpty({ message: '小说不能为空:novel' })
   novel: number; // 小说id
   @IsNotEmpty({ message: '所属不能为空:belongId' })
   belongId: number; // 所属

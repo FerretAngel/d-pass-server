@@ -32,6 +32,12 @@ export class NovelController {
     return this.novelService.queryNovel(initQueryPage(query));
   }
 
+  @Get('tags')
+  @Public()
+  async queryTags() {
+    return this.novelService.getTags();
+  }
+
   @Post()
   @Admin()
   async create(@Request() req: any, @Body() createNovelDto: CreateNovelDto) {

@@ -55,15 +55,20 @@ export class BaseService<T extends BaseEntity> {
     const isOr = !!baseQuery.isOr;
     // query构造器
     const queryBuilder = this.repository
-      .createQueryBuilder()
+      .createQueryBuilder('tempTable')
       .skip(baseQuery.skip)
       .take(baseQuery.take)
       .orderBy('createTime', 'DESC');
     this.generateParams(queryBuilder, baseQuery.queryParams, isOr);
-    
+    if (baseQuery.querySelect)
+      queryBuilder.select(
+        baseQuery.querySelect.map((item) => `tempTable.${item}`),
+      );
     // 缓存
-    const temp = queryBuilder.getQueryAndParameters();
-    const sql = this.generateQuerySql(temp[0], temp[1]);
+    // const temp = queryBuilder.getQueryAndParameters();
+
+    // const sql = this.generateQuerySql(temp[0], temp[1]);
+    const sql = queryBuilder.getSql();
     // 查询
     const [data, total] = await queryBuilder
       .cache(sql, parseInt(process.env.DB_CACHE_TIME || '3000'))
