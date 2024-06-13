@@ -22,6 +22,8 @@ export class LogService extends BaseService<Log> {
   ) {
     super(logRepository);
     this.saveCache = this.saveCache.bind(this);
+    this.cacheMsg = this.cacheMsg.bind(this);
+    this.error = this.error.bind(this);
   }
 
   private async saveCache() {

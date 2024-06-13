@@ -35,6 +35,8 @@ export class ContentController {
   @Get(':id')
   @Public()
   async findOne(@Param('id') id: string) {
+    const ID = +id;
+    if (isNaN(ID)) throw new Error('id必须为数字');
     const content = await this.contentService.findOne(+id);
     if (!content) throw new Error('内容不存在');
     return content;
