@@ -26,7 +26,7 @@ export class VolumeController {
 
   @Get()
   findAll(@Param() query: Query) {
-    return this.volumeService.query(initQueryPage(query));
+    return this.volumeService.queryContents(initQueryPage(query));
   }
 
   @Patch(':id')
@@ -40,6 +40,4 @@ export class VolumeController {
   remove(@Param('id') id: string) {
     return this.volumeService.remove(+id);
   }
-
-  
 }

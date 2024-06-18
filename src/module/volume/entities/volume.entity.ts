@@ -1,4 +1,5 @@
 import { BaseEntity } from 'src/baseModule/baseEntity';
+import { Content } from 'src/module/content/entities/content.entity';
 import { Column, Entity } from 'typeorm';
 @Entity({
   name: 'volumes',
@@ -13,5 +14,6 @@ export class Volume extends BaseEntity {
   name: string;
   @Column()
   contents: string;
+  contentArray?: Array<Content>;
   contentIds?: Array<number>;
 }

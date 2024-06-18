@@ -14,6 +14,8 @@ export class Content extends BaseEntity {
   title: string; // 标题
   @Column({ type: 'text', select: false })
   content: string; // 内容
+  @Column({ default: '' })
+  remark: string; // 简介
   @Column()
   novel: number; // 小说id
   @Column({ default: false })

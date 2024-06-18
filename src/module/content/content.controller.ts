@@ -42,6 +42,14 @@ export class ContentController {
     return content;
   }
 
+  @Public()
+  @Get('ids/:ids')
+  async findByIds(@Param('ids') ids: string) {
+    const ID = ids.split(',').map((item) => +item);
+    if (ID.some((item) => isNaN(item))) throw new Error('id必须为数字');
+    return this.contentService.findByIds(ID);
+  }
+
   @Patch(':id')
   @Admin()
   update(@Param('id') id: string, @Body() updateContentDto: UpdateContentDto) {

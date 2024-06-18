@@ -16,6 +16,7 @@ export class ContentService extends BaseService<Content> {
     super(contentRepository);
   }
 
+
   findOne(id: number) {
     return this.contentRepository
       .createQueryBuilder('content')
