@@ -46,6 +46,12 @@ export class NovelController {
     return this.novelService.addNovel(fingerprint, createNovelDto);
   }
 
+  @Get(':id')
+  @Public()
+  async findOne(@Param('id') id: string) {
+    return this.novelService.findById(+id);
+  }
+
   @Patch(':id')
   @Admin()
   async update(
