@@ -16,11 +16,11 @@ export class Novel extends BaseEntity {
   @Column({ default: null })
   avatar: string; // 封面
   @Column({ default: null })
+  cover: string; // 背景大图
+  @Column({ default: null })
   describe: string; // 描述
   @Column()
   tags: string; // 标签
   auth?: User; // 作者实体
   roles?: Role[]; // 角色实体
 }
-
-
