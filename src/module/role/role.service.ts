@@ -25,6 +25,7 @@ export class RoleService extends BaseService<Role> {
     const roles = await this.roleRepository.find({
       where: { novel: In(novelIds) },
     });
+    
     const belongIdSet = new Set<number>();
     roles.forEach((role) => {
       belongIdSet.add(role.belongId);
