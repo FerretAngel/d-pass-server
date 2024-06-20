@@ -8,6 +8,5 @@ export class CreateNovelDto {
   @IsNotEmpty({ message: '小说封面不能为空:avatar' })
   avatar: string;
   @IsNotEmpty({ message: '小说标签不能为空:tags' })
-  @IsArray({ message: 'tags必须是字符串数组' })
-  tags: Array<string>;
+  tags: string;
 }

@@ -116,7 +116,7 @@ export class UserService extends BaseService<User> {
     const user = await this.findByFinger(oldFInger);
     if (!user) throw new Error('用户不存在');
     const fingers = user.fingerprint.split(',');
-    if (fingers.includes(fingerprint)) throw new Error('指纹已存在');
+    if (fingers.includes(fingerprint)) return; // 已经存在了
     fingers.push(fingerprint);
     if (fingers.length > 5) fingers.shift();
     user.fingerprint = fingers.join(',');

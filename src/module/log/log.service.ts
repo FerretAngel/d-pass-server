@@ -37,6 +37,7 @@ export class LogService extends BaseService<Log> {
       log.createTime = item.createTime;
       return log;
     });
+
     try {
       await this.logRepository.save(logs);
       await this.redis.del(logKey);
@@ -47,12 +48,13 @@ export class LogService extends BaseService<Log> {
 
   private async cacheMsg(msg: string, type: Log['type']) {
     const { logKey, timer, saveCache } = this;
+    console.log(msg);
     clearTimeout(timer);
     const cacheStr = await this.redis.get(logKey);
     const cache: CreateLog[] = JSON.parse(cacheStr || '[]');
     cache.push({ message: msg, type, createTime: new Date() });
     await this.redis.set(logKey, JSON.stringify(cache));
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       saveCache();
     }, 1000);
   }
@@ -61,6 +63,7 @@ export class LogService extends BaseService<Log> {
     return this.cacheMsg(msg, 0);
   }
   info(msg: string) {
+    console.log(msg);
     return this.cacheMsg(msg, 1);
   }
 }

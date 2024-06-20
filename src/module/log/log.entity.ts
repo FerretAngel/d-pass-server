@@ -8,7 +8,7 @@ import { BaseEntity } from 'src/baseModule/baseEntity';
 })
 export class Log extends BaseEntity {
   @Column({ default: 1 })
-  type: 0|1; // 类型 0:错误 1:信息
-  @Column({ default: '' })
+  type: 0 | 1; // 类型 0:错误 1:信息
+  @Column({ type: 'text' })
   message: string; // 消息
 }

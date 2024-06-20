@@ -31,7 +31,7 @@ export class NovelService extends BaseService<Novel> {
     return this.create({
       ...createNovelDto,
       author: user.id,
-      tags: createNovelDto.tags.join(','), // 将标签数组转为字符串
+      tags: createNovelDto.tags, // 将标签数组转为字符串
     });
   }
   /**
@@ -40,7 +40,7 @@ export class NovelService extends BaseService<Novel> {
   updateNovel(id: number, updateNovelDto: UpdateNovelDto) {
     return this.update(id, {
       ...updateNovelDto,
-      tags: updateNovelDto.tags.join(','), // 将标签数组转为字符串
+      tags: updateNovelDto.tags, // 将标签数组转为字符串
     }).then(() => '更新成功');
   }
   /**
