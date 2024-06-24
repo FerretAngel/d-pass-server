@@ -11,7 +11,7 @@ import {
 import { Response } from 'express';
 import { EmailService } from 'src/module/email/email.service';
 import { LogService } from 'src/module/log/log.service';
-import { QueryFailedError } from 'typeorm';
+import { EntityPropertyNotFoundError, QueryFailedError } from 'typeorm';
 
 type ExecptionType =
   | HttpException
@@ -75,6 +75,12 @@ function getStatusAndMessage(exception: ExecptionType) {
       return {
         code: 500,
         message: '数据库查询错误:' + JSON.stringify(exception, null, 2),
+      };
+    case EntityPropertyNotFoundError:
+      console.log('数据库字段错误', exception);
+      return {
+        code: 400,
+        message: '数据库字段错误:' + JSON.stringify(exception, null, 2),
       };
     default:
       console.error('未处理的错误', exception);
