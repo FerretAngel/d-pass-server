@@ -29,6 +29,11 @@ export class ComicController {
     return this.comicService.Query(initQueryPage(query));
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.comicService.findById(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateComicDto: UpdateComicDto) {
     return this.comicService.update(+id, updateComicDto);
