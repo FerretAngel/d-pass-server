@@ -22,7 +22,7 @@ export class AppService {
   ) {}
 
   getHello(): string {
-    return 'Hello World!';
+    return 'Already connected to the D-PASS server!';
   }
 
   async search(input: string) {

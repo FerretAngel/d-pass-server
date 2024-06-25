@@ -9,9 +9,6 @@ import { BaseQuery } from 'src/baseModule/baseQuery';
 
 @Injectable()
 export class ComicService extends BaseService<Comic> {
-  findOne(arg0: number) {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(Comic)
     private readonly comicRepository: Repository<Comic>,
