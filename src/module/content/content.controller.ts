@@ -20,10 +20,13 @@ export class ContentController {
 
   @Post()
   @Admin()
-  create(@Body() createContentDto: CreateContentDto) {
-    const { news, avatar } = createContentDto;
-    if (news && !avatar) throw new Error('咨询必须有封面');
-    return this.contentService.create(createContentDto);
+  async create(@Body() createContentDto: CreateContentDto) {
+    const { news, avatar, volumeId } = createContentDto;
+    if (news && !avatar) throw new Error('资讯必须有封面');
+    const content = await this.contentService.create(createContentDto);
+    if (volumeId) {
+      await this.contentService.updateVolume(content, volumeId);
+    }
   }
 
   @Get()

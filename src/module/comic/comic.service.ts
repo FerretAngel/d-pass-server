@@ -4,7 +4,7 @@ import { UpdateComicDto } from './dto/update-comic.dto';
 import { BaseService } from 'src/baseModule/baseService';
 import { Comic } from './entities/comic.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { BaseQuery } from 'src/baseModule/baseQuery';
 
 @Injectable()
@@ -30,5 +30,11 @@ export class ComicService extends BaseService<Comic> {
       item.urlArr = item.urls.split(',');
     });
     return res;
+  }
+
+  search(key: string) {
+    return this.comicRepository.find({
+      where: [{ title: Like(`%${key}%`) }],
+    });
   }
 }

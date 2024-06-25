@@ -4,7 +4,7 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
 import { BaseService } from 'src/baseModule/baseService';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { BelongService } from '../belong/belong.service';
 import { Belong } from '../belong/entities/belong.entity';
 
@@ -25,7 +25,7 @@ export class RoleService extends BaseService<Role> {
     const roles = await this.roleRepository.find({
       where: { novel: In(novelIds) },
     });
-    
+
     const belongIdSet = new Set<number>();
     roles.forEach((role) => {
       belongIdSet.add(role.belongId);
@@ -41,5 +41,17 @@ export class RoleService extends BaseService<Role> {
       role.belong = belongMap.get(role.belongId);
     });
     return roles;
+  }
+
+  search(key: string) {
+    return this.roleRepository.find({
+      where: [
+        { name: Like(`%${key}%`) },
+        { describe: Like(`%${key}%`) },
+        { hobby: Like(`%${key}%`) },
+        { ability: Like(`%${key}%`) },
+        { occupation: Like(`%${key}%`) },
+      ],
+    });
   }
 }

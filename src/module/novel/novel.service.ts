@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BaseService } from 'src/baseModule/baseService';
 import { Novel } from './entities/novel.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { BaseQuery } from 'src/baseModule/baseQuery';
 import { CreateNovelDto } from './dto/create-novel.dto';
@@ -100,5 +100,11 @@ export class NovelService extends BaseService<Novel> {
       tags.split(',').forEach((tag) => tagsSet.add(tag));
     });
     return Array.from(tagsSet);
+  }
+
+  async search(key: string) {
+    return this.novelRepository.find({
+      where: { name: Like(`%${key}%`) },
+    });
   }
 }

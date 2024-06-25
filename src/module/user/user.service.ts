@@ -47,7 +47,10 @@ export class UserService extends BaseService<User> {
   /**
    * 用户注册
    */
-  async register(fingerprint: string, createUserDto: CreateUserDto) {
+  async register(
+    fingerprint: string,
+    createUserDto?: CreateUserDto,
+  ): Promise<User> {
     const { name, email } = createUserDto;
     // 验证用户昵称
     name && this.checkUserName(name);
@@ -62,13 +65,17 @@ export class UserService extends BaseService<User> {
     return this.userRepository.save({ name, email, fingerprint });
   }
 
-  async findByFinger(fingerprint: string) {
-    return this.userRepository.findOne({
+  async findByFinger(fingerprint: string): Promise<User> {
+    const user = await this.userRepository.findOne({
       select: UserKeys,
       where: {
         fingerprint: Like(`%${fingerprint}%`),
       },
     });
+    if (!user) {
+      return await this.register(fingerprint);
+    }
+    return user;
   }
 
   async updateUserName(id: number, name: string) {

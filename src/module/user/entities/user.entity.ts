@@ -7,7 +7,7 @@ import { BaseEntity } from 'src/baseModule/baseEntity';
   },
 })
 export class User extends BaseEntity {
-  @Column({ default: '默认用户名' })
+  @Column({ default: '欧阳冬冬' })
   name: string;
   @Column({ default: null })
   avatar: string;

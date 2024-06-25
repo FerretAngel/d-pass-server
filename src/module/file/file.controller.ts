@@ -28,7 +28,7 @@ export class FileController {
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     const fileName = await this.fileService.uploadFile(file);
     return {
-      url: `http${process.env.SSL === 'true' ? 's' : ''}://${process.env.APP_HOST}${process.env.APP_PORT ? `:${process.env.APP_PORT}` : ''}${process.env.BASE_URL ? `/${process.env.BASE_URL}` : ''}/file/${fileName}`,
+      url: `${process.env.BASE_URL ? `/${process.env.BASE_URL}` : ''}/file/${fileName}`,
     };
   }
 

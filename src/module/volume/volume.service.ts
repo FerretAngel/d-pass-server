@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateVolumeDto } from './dto/create-volume.dto';
 import { UpdateVolumeDto } from './dto/update-volume.dto';
 import { BaseService } from 'src/baseModule/baseService';
 import { Volume } from './entities/volume.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { BaseQuery } from 'src/baseModule/baseQuery';
 import { Content } from '../content/entities/content.entity';
 import { ContentService } from '../content/content.service';
@@ -14,6 +14,7 @@ export class VolumeService extends BaseService<Volume> {
   constructor(
     @InjectRepository(Volume)
     private readonly volumeRepository: Repository<Volume>,
+    @Inject(forwardRef(() => ContentService))
     private readonly contentService: ContentService,
   ) {
     super(volumeRepository);
@@ -42,5 +43,19 @@ export class VolumeService extends BaseService<Volume> {
       item.contentArray = contentIds.map((id) => contentsMap.get(id));
     });
     return res;
+  }
+
+  queryByContentIds(contentIds: number[]) {
+    return this.volumeRepository.find({
+      where: contentIds.map((id) => {
+        return { contents: Like(`%${id}%`) };
+      }),
+    });
+  }
+
+  search(key: string) {
+    return this.volumeRepository.find({
+      where: [{ name: Like(`%${key}%`) }],
+    });
   }
 }
