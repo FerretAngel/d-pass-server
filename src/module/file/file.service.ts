@@ -8,7 +8,8 @@ export class FileService {
   _publicPath: string;
   async uploadFile(file: Express.Multer.File) {
     const tempPath = this.tempPath;
-    const filePath = Path.join(tempPath, file.originalname);
+    const fileType = file.originalname.split('.').pop();
+    const filePath = Path.join(tempPath, `${Date.now()}.${fileType}`);
     await this.writeFile(filePath, file.buffer);
     const webpPath = Path.join(this.tempPath, `${this.fileName}.webp`);
     await this.imageToWebp(filePath, webpPath);

@@ -6,12 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { VolumeService } from './volume.service';
 import { CreateVolumeDto } from './dto/create-volume.dto';
 import { UpdateVolumeDto } from './dto/update-volume.dto';
-import { Query } from 'typeorm/driver/Query';
-import { initQueryPage } from 'src/baseModule/baseQuery';
+import { BaseQuery, initQueryPage } from 'src/baseModule/baseQuery';
 import { Admin } from 'src/guards/access-token.guard';
 
 @Controller('volume')
@@ -25,7 +25,7 @@ export class VolumeController {
   }
 
   @Get()
-  findAll(@Param() query: Query) {
+  findAll(@Query() query: BaseQuery) {
     return this.volumeService.queryContents(initQueryPage(query));
   }
 

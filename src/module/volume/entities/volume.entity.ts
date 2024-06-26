@@ -12,7 +12,7 @@ export class Volume extends BaseEntity {
   novel: number;
   @Column()
   name: string;
-  @Column()
+  @Column({ default: null })
   contents: string;
   contentArray?: Array<Content>;
   contentIds?: Array<number>;

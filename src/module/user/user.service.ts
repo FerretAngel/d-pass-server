@@ -51,7 +51,7 @@ export class UserService extends BaseService<User> {
     fingerprint: string,
     createUserDto?: CreateUserDto,
   ): Promise<User> {
-    const { name, email } = createUserDto;
+    const { name, email } = createUserDto ?? {};
     // 验证用户昵称
     name && this.checkUserName(name);
     // 验证邮箱

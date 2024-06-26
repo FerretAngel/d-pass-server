@@ -24,14 +24,14 @@ export class VolumeService extends BaseService<Volume> {
     const res = await this.query(query);
     const idsSet = new Set<number>();
     res.list.forEach((item) => {
-      item.contents.split(',').forEach((contentId) => {
+      item.contents?.split(',').forEach((contentId) => {
         if (!contentId) return;
         const id = +contentId;
         if (isNaN(id)) return;
         idsSet.add(id);
       });
     });
-
+    if (idsSet.size === 0) return res;
     const ids = Array.from(idsSet);
     const contents = await this.contentService.findByIds(ids);
     const contentsMap = new Map<number, Content>();
@@ -39,7 +39,7 @@ export class VolumeService extends BaseService<Volume> {
       contentsMap.set(item.id, item);
     });
     res.list.forEach((item) => {
-      const contentIds = item.contents.split(',').map((item) => +item);
+      const contentIds = item.contents?.split(',').map((item) => +item);
       item.contentArray = contentIds.map((id) => contentsMap.get(id));
     });
     return res;

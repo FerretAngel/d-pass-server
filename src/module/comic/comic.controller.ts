@@ -36,7 +36,7 @@ export class ComicController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateComicDto: UpdateComicDto) {
-    return this.comicService.update(+id, updateComicDto);
+    return this.comicService.updateComic(+id, updateComicDto);
   }
 
   @Delete(':id')

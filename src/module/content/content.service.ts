@@ -22,8 +22,8 @@ export class ContentService extends BaseService<Content> {
   async updateVolume(content: Content, volumeId: number) {
     const volume = await this.volumeService.findById(volumeId);
     if (!volume) throw new Error('卷不存在');
-    if (volume.contents.includes(content.id.toString())) return;
-    const contents = volume.contents.split(',');
+    if (volume.contents?.includes(content.id.toString())) return;
+    const contents = volume.contents?.split(',') ?? [];
     contents.push(content.id.toString());
     volume.contents = contents.join(',');
     await this.volumeService.update(volumeId, volume);

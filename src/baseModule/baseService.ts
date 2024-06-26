@@ -69,6 +69,8 @@ export class BaseService<T extends BaseEntity> {
 
     // const sql = this.generateQuerySql(temp[0], temp[1]);
     const sql = queryBuilder.getSql();
+    console.log(sql,baseQuery);
+    
     // 查询
     const [data, total] = await queryBuilder
       .cache(sql, parseInt(process.env.DB_CACHE_TIME || '3000'))
