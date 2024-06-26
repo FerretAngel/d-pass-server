@@ -21,10 +21,13 @@ export class ContentController {
   @Post()
   @Admin()
   async create(@Body() createContentDto: CreateContentDto) {
-    const { news, avatar, volumeId } = createContentDto;
-    if (news && !avatar) throw new Error('资讯必须有封面');
-    const content = await this.contentService.create(createContentDto);
+    const { type, avatar, volumeId } = createContentDto;
+    if (type === 1 && !avatar) throw new Error('资讯必须有封面');
     if (volumeId) {
+      delete createContentDto.volumeId;
+    }
+    const content = await this.contentService.create(createContentDto);
+    if (volumeId && type === 0) {
       await this.contentService.updateVolume(content, volumeId);
     }
   }

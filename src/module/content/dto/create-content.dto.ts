@@ -9,7 +9,7 @@ export class CreateContentDto {
   novel: number;
   @IsNotEmpty({ message: '小说简介不能为空：remark' })
   remark: string;
-  volumeId?:number;
-  news?: boolean;
+  volumeId?: number;
+  type?: number;
   avatar?: string;
 }

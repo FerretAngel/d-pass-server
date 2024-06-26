@@ -18,8 +18,8 @@ export class Content extends BaseEntity {
   remark: string; // 简介
   @Column()
   novel: number; // 小说id
-  @Column({ default: false })
-  news: boolean; // 是否是新闻
+  @Column({ default: 0 })
+  type: number; // 类型 : 0:小说 1:资讯
   @Column({ default: null })
   avatar: string; // 封面
 }
