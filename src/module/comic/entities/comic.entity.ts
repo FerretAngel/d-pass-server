@@ -15,7 +15,6 @@ export class Comic extends BaseEntity {
   description: string; // 描述
   @Column({ type: 'text' })
   urls: string; // 内容
-  urlArr?: Array<string>;
   @Column()
   novel: number; // 小说id
 }

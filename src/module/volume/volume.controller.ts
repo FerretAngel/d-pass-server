@@ -26,7 +26,7 @@ export class VolumeController {
 
   @Get()
   findAll(@Query() query: BaseQuery) {
-    return this.volumeService.queryContents(initQueryPage(query));
+    return this.volumeService.query(initQueryPage({ ...query, parent: null }));
   }
 
   @Patch(':id')

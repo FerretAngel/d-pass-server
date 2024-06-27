@@ -1,13 +1,12 @@
-import { Entity, Column } from 'typeorm';
 import { BaseEntity } from 'src/baseModule/baseEntity';
-import { User } from 'src/module/user/entities/user.entity';
+import {  Column, Entity } from 'typeorm';
 @Entity({
-  name: 'novel_content',
+  name: 'novel_info',
   orderBy: {
     createTime: 'DESC',
   },
 })
-export class Content extends BaseEntity {
+export class Info extends BaseEntity{
   @Column({ default: 1 })
   author: number; // 作者
   @Column()
@@ -18,6 +17,6 @@ export class Content extends BaseEntity {
   content: string; // 内容
   @Column({ default: '' })
   remark: string; // 简介
-  @Column({ default: null })
-  parent: number; // 父级id
+  @Column({ default: '' })
+  cover: string; // 封面
 }

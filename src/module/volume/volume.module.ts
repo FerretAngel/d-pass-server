@@ -1,17 +1,12 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { VolumeService } from './volume.service';
 import { VolumeController } from './volume.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Volume } from './entities/volume.entity';
 import { ContentModule } from '../content/content.module';
-import { NovelModule } from '../novel/novel.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Content } from '../content/entities/content.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Volume]),
-    forwardRef(() => ContentModule),
-    NovelModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Content]),forwardRef(() => ContentModule)],
   controllers: [VolumeController],
   providers: [VolumeService],
   exports: [VolumeService],

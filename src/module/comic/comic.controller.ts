@@ -26,7 +26,7 @@ export class ComicController {
   @Get()
   @Public()
   findAll(@Query() query: BaseQuery) {
-    return this.comicService.Query(initQueryPage(query));
+    return this.comicService.query(initQueryPage(query));
   }
 
   @Get(':id')
@@ -36,7 +36,7 @@ export class ComicController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateComicDto: UpdateComicDto) {
-    return this.comicService.updateComic(+id, updateComicDto);
+    return this.comicService.update(+id, updateComicDto);
   }
 
   @Delete(':id')

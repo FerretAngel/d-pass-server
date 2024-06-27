@@ -16,26 +16,6 @@ export class ComicService extends BaseService<Comic> {
     super(comicRepository);
   }
 
-  create(createDto: CreateComicDto) {
-    const { urlArr, ...rest } = createDto;
-    const urls = urlArr.join(',');
-    return this.comicRepository.save({ urls, ...rest });
-  }
-
-  updateComic(id: number, updateDto: UpdateComicDto) {
-    const { urlArr, ...rest } = updateDto;
-    const urls = urlArr.join(',');
-    return this.update(id, { urls, ...rest });
-  }
-
-  async Query(baseQuery: BaseQuery<Comic>) {
-    const res = await this.query(baseQuery);
-    res.list.forEach((item) => {
-      item.urlArr = item.urls.split(',');
-    });
-    return res;
-  }
-
   search(key: string) {
     return this.comicRepository.find({
       where: [{ title: Like(`%${key}%`) }],

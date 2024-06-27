@@ -13,21 +13,10 @@ export class ContentService extends BaseService<Content> {
   constructor(
     @InjectRepository(Content)
     private readonly contentRepository: Repository<Content>,
-    @Inject(forwardRef(() => VolumeService))
-    private readonly volumeService: VolumeService,
   ) {
     super(contentRepository);
   }
 
-  async updateVolume(content: Content, volumeId: number) {
-    const volume = await this.volumeService.findById(volumeId);
-    if (!volume) throw new Error('卷不存在');
-    if (volume.contents?.includes(content.id.toString())) return;
-    const contents = volume.contents?.split(',') ?? [];
-    contents.push(content.id.toString());
-    volume.contents = contents.join(',');
-    await this.volumeService.update(volumeId, volume);
-  }
   async search(_key: string) {
     const key = `%${_key}%`;
     const query = this.contentRepository
@@ -36,12 +25,7 @@ export class ContentService extends BaseService<Content> {
       .orWhere('content.title like :key', { key })
       .orWhere('content.content like :key', { key });
     const contentList = await query.getMany();
-    const ids = contentList.map((item) => item.id);
-    const volumes = await this.volumeService.queryByContentIds(ids);
     contentList.forEach((item) => {
-      item['volume'] = volumes.find((volume) =>
-        volume.contents.includes(item.id.toString()),
-      );
       // 截取关键字附近的内容
       const keyIndex = item.content.indexOf(_key);
       if (keyIndex === -1) return;

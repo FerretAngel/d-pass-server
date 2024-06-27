@@ -10,12 +10,6 @@ import { Column, Entity } from 'typeorm';
 export class World extends BaseEntity {
   @Column()
   novel: number; // 小说ID
-  @Column({ default: null })
-  avatar: string;
   @Column()
-  title: string;
-  @Column()
-  remark: string;
-  @Column()
-  config: string;
+  cover: string; // 封面
 }

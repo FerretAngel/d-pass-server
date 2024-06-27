@@ -2,60 +2,24 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { CreateVolumeDto } from './dto/create-volume.dto';
 import { UpdateVolumeDto } from './dto/update-volume.dto';
 import { BaseService } from 'src/baseModule/baseService';
-import { Volume } from './entities/volume.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { BaseQuery } from 'src/baseModule/baseQuery';
 import { Content } from '../content/entities/content.entity';
-import { ContentService } from '../content/content.service';
 
 @Injectable()
-export class VolumeService extends BaseService<Volume> {
+export class VolumeService extends BaseService<Content> {
   constructor(
-    @InjectRepository(Volume)
-    private readonly volumeRepository: Repository<Volume>,
-    @Inject(forwardRef(() => ContentService))
-    private readonly contentService: ContentService,
+    @InjectRepository(Content)
+    private readonly volumeRepository: Repository<Content>,
   ) {
     super(volumeRepository);
   }
 
-  async queryContents(query: BaseQuery) {
-    const res = await this.query(query);
-    const idsSet = new Set<number>();
-    res.list.forEach((item) => {
-      item.contents?.split(',').forEach((contentId) => {
-        if (!contentId) return;
-        const id = +contentId;
-        if (isNaN(id)) return;
-        idsSet.add(id);
-      });
-    });
-    if (idsSet.size === 0) return res;
-    const ids = Array.from(idsSet);
-    const contents = await this.contentService.findByIds(ids);
-    const contentsMap = new Map<number, Content>();
-    contents.forEach((item) => {
-      contentsMap.set(item.id, item);
-    });
-    res.list.forEach((item) => {
-      const contentIds = item.contents?.split(',').map((item) => +item);
-      item.contentArray = contentIds.map((id) => contentsMap.get(id));
-    });
-    return res;
-  }
-
-  queryByContentIds(contentIds: number[]) {
-    return this.volumeRepository.find({
-      where: contentIds.map((id) => {
-        return { contents: Like(`%${id}%`) };
-      }),
-    });
-  }
 
   search(key: string) {
     return this.volumeRepository.find({
-      where: [{ name: Like(`%${key}%`) }],
+      where: [{ title: Like(`%${key}%`) }, { parent: null }],
     });
   }
 }
