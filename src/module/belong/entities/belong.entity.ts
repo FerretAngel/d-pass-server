@@ -10,9 +10,11 @@ export class Belong extends BaseEntity {
   @Column({ default: '' })
   name: string; // 区域名称
   @Column({ type: 'text' })
-  describe: string; // 内容
+  describe?: string; // 内容
   @Column()
   novel: number; // 小说id
   @Column()
-  avatar: string; // 所属区域徽标
+  avatar?: string; // 所属区域徽标
+  @Column()
+  parent?: number; // 父级id
 }

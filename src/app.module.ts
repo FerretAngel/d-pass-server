@@ -20,6 +20,7 @@ import { BelongModule } from './module/belong/belong.module';
 import { ComicModule } from './module/comic/comic.module';
 import { WorldModule } from './module/world/world.module';
 import { InfoModule } from './module/info/info.module';
+import { RegionModule } from './module/region/region.module';
 @Module({
   imports: [
     ...APPModule,
@@ -38,6 +39,7 @@ import { InfoModule } from './module/info/info.module';
     ComicModule,
     WorldModule,
     InfoModule,
+    RegionModule,
   ],
   controllers: [AppController],
   providers: [
