@@ -1,5 +1,7 @@
 import { BaseEntity } from 'src/baseModule/baseEntity';
 import { Belong } from 'src/module/belong/entities/belong.entity';
+import { Content } from 'src/module/content/entities/content.entity';
+import { Info } from 'src/module/info/entities/info.entity';
 import { Column, Entity } from 'typeorm';
 @Entity({
   name: 'roles',
@@ -35,4 +37,8 @@ export class Role extends BaseEntity {
   ability: string; // 能力
   @Column()
   occupation: string; // 职业
+  relation?: {
+    infoList: Info[];
+    contentList: Content[];
+  };
 }

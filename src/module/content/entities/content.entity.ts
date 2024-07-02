@@ -20,4 +20,6 @@ export class Content extends BaseEntity {
   remark: string; // 简介
   @Column({ default: null })
   parent: number; // 父级id
+  @Column({ default: '' })
+  roles: string; // 相关角色id
 }

@@ -1,4 +1,4 @@
-import { In, IsNull, Like, Repository, SelectQueryBuilder } from 'typeorm';
+import { In, IsNull, Like, Not, Repository, SelectQueryBuilder } from 'typeorm';
 import { BaseEntity } from './baseEntity';
 import { BaseQuery } from './baseQuery';
 
@@ -35,14 +35,18 @@ export class BaseService<T extends BaseEntity> {
     for (const key in params) {
       if (Object.hasOwnProperty.call(params, key)) {
         const value = params[key];
-        const NULL = value === null;
+        let whereValue = Like(`%${value}%`);
+        if (value === null || value === 'null' || value === 'NULL') {
+          whereValue = IsNull();
+        } else if (value === 'notNull' || value === 'notnull') {
+          whereValue = Not(IsNull());
+        }
+
         if (typeof value === 'undefined') continue;
         if (isOr) {
-          queryBuilder.orWhere({ [key]: NULL ? IsNull() : Like(`%${value}%`) });
+          queryBuilder.orWhere({ [key]: whereValue });
         } else {
-          queryBuilder.andWhere({
-            [key]: NULL ? IsNull() : Like(`%${value}%`),
-          });
+          queryBuilder.andWhere({ [key]: whereValue });
         }
       }
     }
@@ -72,7 +76,7 @@ export class BaseService<T extends BaseEntity> {
 
     // const sql = this.generateQuerySql(temp[0], temp[1]);
     const sql = queryBuilder.getSql();
-    // console.log(sql);
+    console.log(sql);
     // 查询
     const [data, total] = await queryBuilder
       .cache(sql, parseInt(process.env.DB_CACHE_TIME || '3000'))

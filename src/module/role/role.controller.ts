@@ -20,7 +20,7 @@ export class RoleController {
   @Get()
   @Public()
   query(@Query() query: BaseQuery) {
-    return this.roleService.query(initQueryPage(query));
+    return this.roleService.queryAndBelong(initQueryPage(query));
   }
 
   @Get(':id')

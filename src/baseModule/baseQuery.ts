@@ -61,6 +61,5 @@ export class BaseQuery<T = any> {
 
 export function initQueryPage(queryParam: any) {
   const { page, pageSize, isOr, select, ...params } = queryParam;
-  
   return new BaseQuery(page, pageSize, isOr, select?.split(','), params);
 }

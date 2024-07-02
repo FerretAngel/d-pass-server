@@ -17,7 +17,7 @@ export default TypeOrmModule.forRoot({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   entities: [User, Novel, Content, Role, Log, Belong, Comic, World, Info],
-  synchronize: true,
+  // synchronize: true,
   cache: {
     type: 'ioredis',
     options: {
