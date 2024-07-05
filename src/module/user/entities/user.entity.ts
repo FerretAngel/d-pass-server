@@ -9,24 +9,30 @@ import { BaseEntity } from 'src/baseModule/baseEntity';
 export class User extends BaseEntity {
   @Column({ default: '欧阳冬冬' })
   name: string;
-  @Column({ default: null })
-  avatar: string;
+  @Column({ nullable: true })
+  avatar?: string;
   @Column({ default: false, select: false })
   subscribe: boolean; // 订阅
-  @Column({ default: null, select: false })
-  phone: string;
-  @Column({ default: null, select: false })
-  email: string;
-  @Column({ default: null, select: false })
-  username: string;
-  @Column({ default: null, select: false })
-  password: string;
-  @Column({ default: 0, select: false })
+  @Column({ select: false, nullable: true })
+  phone?: string;
+  @Column({ select: false, nullable: true })
+  email?: string;
+  @Column({ select: false, nullable: true })
+  username?: string;
+  @Column({ select: false, nullable: true })
+  password?: string;
+  @Column({ select: false })
   level: number;
-  @Column({ default: null, select: false })
-  fingerprint: string; // 浏览器指纹，用于信任设备
-  @Column({ default: null })
-  describe: string;
+  @Column({ select: false, nullable: true })
+  fingerprint?: string; // 浏览器指纹，用于信任设备
+  @Column({ nullable: true })
+  describe?: string;
+  @Column({ default: '' })
+  currentCard: string;
+  @Column({ default: '' })
+  cardList: string;
+  @Column({ default: '' })
+  ability: string; // 能力
 }
 
 export const UserKeys: Array<keyof User> = [

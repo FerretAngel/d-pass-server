@@ -17,6 +17,13 @@ import { Admin } from 'src/guards/access-token.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('me')
+  async getMe(@Request() req: any) {
+    const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
+    if (!fingerprint) throw new Error('未获取到浏览器指纹');
+    return this.userService.findByFinger(fingerprint);
+  }
+
   @Post()
   async register(@Request() req: any, @Body() createUserDto: CreateUserDto) {
     const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};

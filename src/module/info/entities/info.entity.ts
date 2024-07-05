@@ -13,8 +13,8 @@ export class Info extends BaseEntity {
   novel: number; // 小说id
   @Column()
   title: string; // 标题
-  @Column({ type: 'text', select: false, default: null })
-  content: string; // 内容
+  @Column({ type: 'text', select: false,nullable: true})
+  content?: string; // 内容
   @Column({ default: '' })
   remark: string; // 简介
   @Column({ default: '' })

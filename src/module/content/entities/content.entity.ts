@@ -14,12 +14,12 @@ export class Content extends BaseEntity {
   novel: number; // 小说id
   @Column()
   title: string; // 标题
-  @Column({ type: 'text', select: false, default: null })
-  content: string; // 内容
+  @Column({ type: 'text', select: false,nullable: true})
+  content?: string; // 内容
   @Column({ default: '' })
   remark: string; // 简介
-  @Column({ default: null })
-  parent: number; // 父级id
+  @Column({ nullable: true })
+  parent?: number; // 父级id
   @Column({ default: '' })
   roles: string; // 相关角色id
 }

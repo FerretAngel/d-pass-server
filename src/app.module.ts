@@ -21,6 +21,7 @@ import { ComicModule } from './module/comic/comic.module';
 import { WorldModule } from './module/world/world.module';
 import { InfoModule } from './module/info/info.module';
 import { RegionModule } from './module/region/region.module';
+import { SystemModule } from './module/system/system.module';
 @Module({
   imports: [
     ...APPModule,
@@ -40,6 +41,7 @@ import { RegionModule } from './module/region/region.module';
     WorldModule,
     InfoModule,
     RegionModule,
+    SystemModule,
   ],
   controllers: [AppController],
   providers: [

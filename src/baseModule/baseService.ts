@@ -3,7 +3,13 @@ import { BaseEntity } from './baseEntity';
 import { BaseQuery } from './baseQuery';
 
 export class BaseService<T extends BaseEntity> {
-  constructor(private readonly repository: Repository<T>) {}
+  cache: boolean = true;
+  constructor(
+    private readonly repository: Repository<T>,
+    cache?: boolean,
+  ) {
+    if (!cache) this.cache = false;
+  }
   async create(createDto: Partial<T>) {
     return this.repository.save(createDto as any);
   }
@@ -77,10 +83,10 @@ export class BaseService<T extends BaseEntity> {
     // const sql = this.generateQuerySql(temp[0], temp[1]);
     const sql = queryBuilder.getSql();
     // console.log(sql);
+    if (this.cache)
+      queryBuilder.cache(sql, parseInt(process.env.DB_CACHE_TIME || '3000'));
     // 查询
-    const [data, total] = await queryBuilder
-      .cache(sql, parseInt(process.env.DB_CACHE_TIME || '3000'))
-      .getManyAndCount();
+    const [data, total] = await queryBuilder.getManyAndCount();
     return baseQuery.getReturn(data, total);
   }
 
