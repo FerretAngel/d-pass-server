@@ -24,13 +24,12 @@ export class UserService extends BaseService<User> {
    * @param {UpdateUserDto} updateUserDto {更新用户信息}
    * @returns {Promise<User>}
    */
-  async updateUserInfo(id: number, updateUserDto: UpdateUserDto) {
-    const { name, avatar, describe } = updateUserDto;
+  async updateUserInfo(id: number, updateUserDto: Partial<User>) {
+    const { fingerprint, level, email, phone, username, ...update } =
+      updateUserDto;
     const user = await this.findById(id);
     if (!user) throw new Error('user not found');
-    if (name) user.name = name;
-    if (avatar) user.avatar = avatar;
-    if (describe) user.describe = describe;
+    Object.assign(user, update);
     return this.update(id, user);
   }
   checkUserName(name: unknown) {

@@ -33,6 +33,12 @@ export class User extends BaseEntity {
   cardList: string;
   @Column({ default: '' })
   ability: string; // 能力
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  brithday: Date;
+  @Column({ default: '男' })
+  sex: string;
+  @Column({ default: '北屿辖区' })
+  region: string;
 }
 
 export const UserKeys: Array<keyof User> = [
@@ -46,4 +52,10 @@ export const UserKeys: Array<keyof User> = [
   'subscribe',
   'avatar',
   'describe',
+  'ability',
+  'brithday',
+  'region',
+  'sex',
+  'currentCard',
+  'cardList',
 ];
