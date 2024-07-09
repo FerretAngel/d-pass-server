@@ -8,6 +8,7 @@ import { Like, Repository } from 'typeorm';
 import { isEmail } from 'class-validator';
 import { SendMailDto } from '../email/mail.dto';
 import { EmailService } from '../email/email.service';
+import { SystemService } from '../system/system.service';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -15,6 +16,7 @@ export class UserService extends BaseService<User> {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly emailService: EmailService,
+    private readonly systemService: SystemService,
   ) {
     super(userRepository);
   }
@@ -25,7 +27,7 @@ export class UserService extends BaseService<User> {
    * @returns {Promise<User>}
    */
   async updateUserInfo(id: number, updateUserDto: Partial<User>) {
-    const { fingerprint, level, email, phone, username, ...update } =
+    const { fingerprint, level, email, phone, username, cardList, ...update } =
       updateUserDto;
     const user = await this.findById(id);
     if (!user) throw new Error('user not found');
@@ -65,6 +67,7 @@ export class UserService extends BaseService<User> {
   }
 
   async findByFinger(fingerprint: string): Promise<User> {
+    if (fingerprint.length !== 32) throw new Error('fingerprint不合法');
     const user = await this.userRepository.findOne({
       select: UserKeys,
       where: {
@@ -134,5 +137,39 @@ export class UserService extends BaseService<User> {
     if (!user) throw new Error('用户不存在');
     if (user.level !== 2) throw new Error('权限不足，无法操作');
     return true;
+  }
+
+  async findMe(fingerprint: string) {
+    const user = await this.findByFinger(fingerprint);
+    // 获取用户的卡片列表
+    const { cardList } = user;
+    const cardListIds = cardList
+      .split(',')
+      .map((item) => +item)
+      .filter((item) => !isNaN(item));
+    const list = await this.systemService.findByIds(cardListIds);
+    user.cardList = list
+      .filter((item) => item.enable)
+      .map((item) => item.content)
+      .join(',');
+    return user;
+  }
+
+  async addCard(fingerprint: string, cardId: number) {
+    if (isNaN(cardId)) throw new Error('卡片id不合法');
+    const user = await this.findByFinger(fingerprint);
+    if (!user) throw new Error('用户不存在');
+    // 检查是否存在卡片id
+    const card = await this.systemService.findById(cardId);
+    if (!card) throw new Error('卡片不存在');
+    if (!card.enable) throw new Error('卡片被禁止使用');
+    const cardList = user.cardList
+      .split(',')
+      .map((item) => +item)
+      .filter((item) => !isNaN(item));
+    if (cardList.includes(cardId)) throw new Error('卡片已存在');
+    cardList.push(cardId);
+    user.cardList = cardList.join(',');
+    return this.update(user.id, user);
   }
 }

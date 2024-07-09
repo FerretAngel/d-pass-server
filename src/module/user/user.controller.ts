@@ -6,6 +6,7 @@ import {
   Patch,
   Request,
   Query,
+  Param,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,7 +22,13 @@ export class UserController {
   async getMe(@Request() req: any) {
     const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
     if (!fingerprint) throw new Error('未获取到浏览器指纹');
-    return this.userService.findByFinger(fingerprint);
+    return this.userService.findMe(fingerprint);
+  }
+  @Get('addCard/:id')
+  async addCard(@Request() req: any, @Param('id') id: string) {
+    const { fingerprint } = (await req[REQUEST_USER_KEY]) ?? {};
+    if (!fingerprint) throw new Error('未获取到浏览器指纹');
+    return this.userService.addCard(fingerprint, +id);
   }
 
   @Post()

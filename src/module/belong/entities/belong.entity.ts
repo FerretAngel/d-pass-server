@@ -9,12 +9,12 @@ import { BaseEntity } from 'src/baseModule/baseEntity';
 export class Belong extends BaseEntity {
   @Column({ default: '' })
   name: string; // 区域名称
-  @Column({ type: 'text',nullable: true})
+  @Column({ type: 'text', nullable: true })
   describe?: string; // 内容
   @Column()
   novel: number; // 小说id
   @Column({ default: '' })
   avatar: string; // 所属区域徽标
-  @Column()
+  @Column({ nullable: true })
   parent?: number; // 父级id
 }

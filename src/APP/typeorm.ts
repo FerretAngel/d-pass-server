@@ -29,7 +29,8 @@ export default TypeOrmModule.forRoot({
     Info,
     System,
   ],
-  // synchronize: true,
+  synchronize: true,
+  logging: true,
   cache: {
     type: 'ioredis',
     options: {
