@@ -30,7 +30,7 @@ export default TypeOrmModule.forRoot({
     System,
   ],
   synchronize: true,
-  logging: true,
+  logging: ['error'],
   cache: {
     type: 'ioredis',
     options: {

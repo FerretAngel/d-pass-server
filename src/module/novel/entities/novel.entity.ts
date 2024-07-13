@@ -2,7 +2,12 @@ import { Entity, Column } from 'typeorm';
 import { BaseEntity } from 'src/baseModule/baseEntity';
 import { User } from 'src/module/user/entities/user.entity';
 import { Role } from 'src/module/role/entities/role.entity';
-
+@Entity({
+  name: 'novel',
+  orderBy: {
+    createTime: 'DESC',
+  },
+})
 export class Novel extends BaseEntity {
   @Column({ default: '默认名称' })
   name: string; // 名称

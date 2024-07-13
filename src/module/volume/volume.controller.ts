@@ -12,7 +12,7 @@ import { VolumeService } from './volume.service';
 import { CreateVolumeDto } from './dto/create-volume.dto';
 import { UpdateVolumeDto } from './dto/update-volume.dto';
 import { BaseQuery, initQueryPage } from 'src/baseModule/baseQuery';
-import { Admin } from 'src/guards/access-token.guard';
+import { Admin, Public } from 'src/guards/access-token.guard';
 
 @Controller('volume')
 export class VolumeController {
@@ -25,7 +25,7 @@ export class VolumeController {
   }
 
   @Get()
-  @Admin()
+  @Public()
   findAll(@Query() query: BaseQuery) {
     return this.volumeService.query(initQueryPage({ ...query, parent: null }));
   }

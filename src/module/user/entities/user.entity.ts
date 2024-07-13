@@ -21,7 +21,7 @@ export class User extends BaseEntity {
   username?: string;
   @Column({ select: false, nullable: true })
   password?: string;
-  @Column({ select: false })
+  @Column({ select: false, default: 0 })
   level: number;
   @Column({ select: false, nullable: true })
   fingerprint?: string; // 浏览器指纹，用于信任设备
