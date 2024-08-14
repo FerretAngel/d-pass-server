@@ -5,6 +5,8 @@ import { NovelService } from './module/novel/novel.service';
 import { RoleService } from './module/role/role.service';
 import { VolumeService } from './module/volume/volume.service';
 import { InfoService } from './module/info/info.service';
+import { SystemService } from './module/system/system.service';
+import { SystemType } from './module/system/entities/system.entity';
 @Injectable()
 export class AppService {
   constructor(
@@ -14,6 +16,7 @@ export class AppService {
     private readonly roleService: RoleService,
     private readonly comicService: ComicService,
     private readonly infoService: InfoService,
+    private readonly systemService: SystemService,
   ) {}
 
   getHello(): string {
@@ -23,6 +26,13 @@ export class AppService {
   async search(input: string) {
     const key = input.trim();
     if (!key) throw new Error('请输入关键字');
+    // 添加搜索记录
+    this.systemService.createItem({
+      type: SystemType.SEARCH_KEY,
+      content: key,
+      default: false,
+      enable: true,
+    });
     const [novel, volume, content, role, comic, info] = await Promise.all([
       this.novelService.search(key),
       this.volumeService.search(key),

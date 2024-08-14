@@ -5,6 +5,7 @@ export enum SystemType {
   AVATAR = 1,
   CARD = 2,
   SURNAME = 3,
+  SEARCH_KEY = 4,
 }
 @Entity({
   name: 'system',
@@ -14,7 +15,7 @@ export enum SystemType {
 })
 export class System extends BaseEntity {
   @Column()
-  type: SystemType; // 0:系统设置 1:头像 2:卡面 3:姓氏
+  type: SystemType; // 0:系统设置 1:头像 2:卡面 3:姓氏 4:搜索记录
   @Column({ default: '' })
   content: string;
   @Column({ default: true })
