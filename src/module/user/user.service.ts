@@ -9,6 +9,7 @@ import { isEmail } from 'class-validator';
 import { SendMailDto } from '../email/mail.dto';
 import { EmailService } from '../email/email.service';
 import { SystemService } from '../system/system.service';
+import { System } from '../system/entities/system.entity';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -148,10 +149,9 @@ export class UserService extends BaseService<User> {
       .map((item) => +item)
       .filter((item) => !isNaN(item));
     const list = await this.systemService.findByIds(cardListIds);
-    user.cardList = list
+    user.cards = list
       .filter((item) => item.enable)
-      .map((item) => item.content)
-      .join(',');
+      .map((item) => item) as System[];
     return user;
   }
 

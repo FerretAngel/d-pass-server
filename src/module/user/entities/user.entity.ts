@@ -1,5 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { BaseEntity } from 'src/baseModule/baseEntity';
+import { System } from 'src/module/system/entities/system.entity';
 @Entity({
   name: 'users',
   orderBy: {
@@ -31,6 +32,7 @@ export class User extends BaseEntity {
   currentCard: string;
   @Column({ default: '' })
   cardList: string;
+  cards:System[];
   @Column({ default: '' })
   ability: string; // 能力
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
