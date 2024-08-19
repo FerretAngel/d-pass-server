@@ -1,18 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { RegionService } from './region.service';
+import { Test, TestingModule } from '@nestjs/testing'
 
-describe('RegionService', () => {
-  let service: RegionService;
+import { RegionService } from './region.service'
+
+describe('regionService', () => {
+  let service: RegionService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [RegionService],
-    }).compile();
+    }).compile()
 
-    service = module.get<RegionService>(RegionService);
-  });
+    service = module.get<RegionService>(RegionService)
+  })
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+    expect(service).toBeDefined()
+  })
+})

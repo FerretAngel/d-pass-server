@@ -51,7 +51,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         message = ErrorEnum.SERVER_ERROR?.split(':')[1]
     }
     else {
-      console.log(exception);
+      console.log(exception)
       this.logger.warn(
         `错误信息：(${status}) ${message} Path: ${decodeURI(url)}`,
       )

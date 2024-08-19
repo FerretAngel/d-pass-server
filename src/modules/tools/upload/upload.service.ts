@@ -26,18 +26,17 @@ export class UploadService {
     private storageRepository: Repository<Storage>,
   ) {}
 
-
   /**
    * 图片转webp
    */
-  async saveImage2Webp(file:MultipartFile,userId:number){
+  async saveImage2Webp(file: MultipartFile, userId: number) {
 
   }
 
   /**
    * 保存文件上传记录
    */
-  async saveFile(file: MultipartFile, userId: number):Promise<Storage> {
+  async saveFile(file: MultipartFile, userId: number): Promise<Storage> {
     if (isNil(file))
       throw new NotFoundException('Have not any file to upload!')
 
@@ -51,7 +50,7 @@ export class UploadService {
 
     saveLocalFile(await file.toBuffer(), name, currentDate, type)
 
-    let tempStorage={
+    let tempStorage = {
       name,
       fileName,
       extName,
@@ -62,28 +61,29 @@ export class UploadService {
     }
 
     // 图片类型转换为webp存储
-    if(type === Type.IMAGE && extName !=='webp'){
+    if (type === Type.IMAGE && extName !== 'webp') {
       try {
         const reg = /\.(\w+)$/
-        const webpFileName = fileName.replace(reg,'.webp')
-        const webpName = name.replace(reg,'.webp')
-        const webpPath = path.replace(reg,'.webp')
-        await imageToWebp(path,webpPath)
+        const webpFileName = fileName.replace(reg, '.webp')
+        const webpName = name.replace(reg, '.webp')
+        const webpPath = path.replace(reg, '.webp')
+        await imageToWebp(path, webpPath)
         // 删除原本的文件
         deleteFile(path)
-        tempStorage={
+        tempStorage = {
           ...tempStorage,
-          fileName:webpFileName,
-          name:webpName,
-          path:webpPath,
-          extName:'webp',
+          fileName: webpFileName,
+          name: webpName,
+          path: webpPath,
+          extName: 'webp',
         }
-      } catch (error) {
-        console.error(error);
+      }
+      catch (error) {
+        console.error(error)
       }
     }
 
-    const storage =  await this.storageRepository.save(tempStorage)
+    const storage = await this.storageRepository.save(tempStorage)
 
     return storage
   }

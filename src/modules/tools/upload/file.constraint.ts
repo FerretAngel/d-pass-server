@@ -22,8 +22,9 @@ function checkFileAndLimit(file: MultipartFile, limits: FileLimit = {}) {
   if (
     has(file, '_buf')
     && Buffer.byteLength((file as any)._buf) > limits.fileSize
-  )
+  ) {
     return false
+  }
   return true
 }
 

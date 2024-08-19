@@ -85,14 +85,15 @@ export class DictItemService {
   async findOne(id: number): Promise<DictItemEntity> {
     return this.dictItemRepository.findOneBy({ id })
   }
+
   /**
    * 查询多个
    */
-  async findMany(ids:number[]){
+  async findMany(ids: number[]) {
     return this.dictItemRepository.find({
-      where:{
-        id:In(ids)
-      }
+      where: {
+        id: In(ids),
+      },
     })
   }
 }

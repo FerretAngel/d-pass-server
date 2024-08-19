@@ -1,13 +1,15 @@
-import { Module } from '@nestjs/common';
-import { NovelService } from './novel.service';
-import { NovelController } from './novel.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Novel } from './entities/novel.entity';
+import { Module } from '@nestjs/common'
+
+import { TypeOrmModule } from '@nestjs/typeorm'
+
+import { Novel } from './entities/novel.entity'
+import { NovelController } from './novel.controller'
+import { NovelService } from './novel.service'
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Novel])],
+  imports: [TypeOrmModule.forFeature([Novel])],
   controllers: [NovelController],
   providers: [NovelService],
-  exports:[TypeOrmModule,NovelService]
+  exports: [TypeOrmModule, NovelService],
 })
 export class NovelModule {}

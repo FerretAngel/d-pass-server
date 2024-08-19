@@ -1,11 +1,12 @@
+import { exec } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import { generateShortUUID } from './tool.util'
 
 import { MultipartFile } from '@fastify/multipart'
 
 import dayjs from 'dayjs'
-import { exec } from 'child_process'
+
+import { generateShortUUID } from './tool.util'
 
 export enum Type {
   IMAGE = 'Images',
@@ -106,9 +107,9 @@ export function getCommand(type: string, orginUrl: string, webpUrl: string, quli
     case 'gif':
       return `ffmpeg -i ${reallyOriginUrl} -c:v libwebp -loop 0 -lossless ${
         quliaity / 100
-      } ${reallywebpUrl} -y`;
+      } ${reallywebpUrl} -y`
     default:
-      return `ffmpeg -i ${reallyOriginUrl} -q:v ${quliaity} ${reallywebpUrl} -y`;
+      return `ffmpeg -i ${reallyOriginUrl} -q:v ${quliaity} ${reallywebpUrl} -y`
   }
 }
 
@@ -116,28 +117,28 @@ export function runCommand(command: string) {
   return new Promise((resolve, reject) => {
     exec(command, (err, stdout) => {
       if (err) {
-        console.error(err);
+        console.error(err)
         reject(
           new Error(
             `转换图片失败:${command.replaceAll('\\', '/')}，错误信息:${stdout}`,
           ),
-        );
+        )
       }
-      resolve(true);
-    });
-  });
+      resolve(true)
+    })
+  })
 }
 
 export function imageToWebp(orginUrl: string, webpUrl: string) {
   return new Promise(async (resolve, reject) => {
-    const type = path.extname(orginUrl).slice(1);
-    const command = getCommand(type, orginUrl, webpUrl);
+    const type = path.extname(orginUrl).slice(1)
+    const command = getCommand(type, orginUrl, webpUrl)
     exec(command, (err, stdout) => {
       if (err) {
-        console.error(err);
-        reject(new Error(`转换图片失败:${command}，错误信息:${stdout}`));
+        console.error(err)
+        reject(new Error(`转换图片失败:${command}，错误信息:${stdout}`))
       }
-      resolve(true);
-    });
-  });
+      resolve(true)
+    })
+  })
 }

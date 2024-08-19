@@ -20,6 +20,9 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard'
 import { RbacGuard } from './modules/auth/guards/rbac.guard'
 import { HealthModule } from './modules/health/health.module'
 import { NetdiskModule } from './modules/netdisk/netdisk.module'
+import { NovelModule } from './modules/novel/novel.module'
+import { RegionModule } from './modules/region/region.module'
+import { RolesModule } from './modules/roles/roles.module'
 import { SseModule } from './modules/sse/sse.module'
 import { SystemModule } from './modules/system/system.module'
 import { TasksModule } from './modules/tasks/tasks.module'
@@ -28,9 +31,6 @@ import { ToolsModule } from './modules/tools/tools.module'
 import { DatabaseModule } from './shared/database/database.module'
 
 import { SocketModule } from './socket/socket.module'
-import { RolesModule } from './modules/roles/roles.module';
-import { NovelModule } from './modules/novel/novel.module';
-import { RegionModule } from './modules/region/region.module';
 
 @Module({
   imports: [

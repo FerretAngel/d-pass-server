@@ -1,11 +1,12 @@
 import { NotFoundException } from '@nestjs/common'
-import { In, ObjectLiteral, Repository } from 'typeorm'
+import { In, Repository } from 'typeorm'
 
 import { PagerDto } from '~/common/dto/pager.dto'
 
+import { CommonEntity } from '~/common/entity/common.entity'
+
 import { paginate } from '../paginate'
 import { Pagination } from '../paginate/pagination'
-import { CommonEntity } from '~/common/entity/common.entity'
 
 export class BaseService<E extends CommonEntity, R extends Repository<E> = Repository<E>> {
   constructor(private repository: R) {
@@ -25,12 +26,13 @@ export class BaseService<E extends CommonEntity, R extends Repository<E> = Repos
 
     return item
   }
-  async findMany(ids:number[]){
+
+  async findMany(ids: number[]) {
     return this.repository.find({
       // @ts-ignore
-      where:{
-        id:In(ids)
-      }
+      where: {
+        id: In(ids),
+      },
     })
   }
 
