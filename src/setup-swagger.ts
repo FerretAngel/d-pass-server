@@ -19,6 +19,7 @@ export function setupSwagger(
     return
 
   const documentBuilder = new DocumentBuilder()
+    // .addBearerAuth()
     .setTitle(name)
     .setDescription(`${name} API document`)
     .setVersion('1.0')

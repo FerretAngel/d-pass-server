@@ -28,6 +28,9 @@ import { ToolsModule } from './modules/tools/tools.module'
 import { DatabaseModule } from './shared/database/database.module'
 
 import { SocketModule } from './socket/socket.module'
+import { RolesModule } from './modules/roles/roles.module';
+import { NovelModule } from './modules/novel/novel.module';
+import { RegionModule } from './modules/region/region.module';
 
 @Module({
   imports: [
@@ -79,6 +82,13 @@ import { SocketModule } from './socket/socket.module'
     // end biz
 
     TodoModule,
+
+    RolesModule,
+
+    NovelModule,
+
+    RegionModule,
+
   ],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },

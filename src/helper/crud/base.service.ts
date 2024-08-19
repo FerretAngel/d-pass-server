@@ -1,12 +1,13 @@
 import { NotFoundException } from '@nestjs/common'
-import { ObjectLiteral, Repository } from 'typeorm'
+import { In, ObjectLiteral, Repository } from 'typeorm'
 
 import { PagerDto } from '~/common/dto/pager.dto'
 
 import { paginate } from '../paginate'
 import { Pagination } from '../paginate/pagination'
+import { CommonEntity } from '~/common/entity/common.entity'
 
-export class BaseService<E extends ObjectLiteral, R extends Repository<E> = Repository<E>> {
+export class BaseService<E extends CommonEntity, R extends Repository<E> = Repository<E>> {
   constructor(private repository: R) {
   }
 
@@ -23,6 +24,14 @@ export class BaseService<E extends ObjectLiteral, R extends Repository<E> = Repo
       throw new NotFoundException('未找到该记录')
 
     return item
+  }
+  async findMany(ids:number[]){
+    return this.repository.find({
+      // @ts-ignore
+      where:{
+        id:In(ids)
+      }
+    })
   }
 
   async create(dto: any): Promise<E> {

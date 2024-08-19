@@ -22,6 +22,7 @@ import { TodoEntity } from '~/modules/todo/todo.entity'
 
 import { TodoDto, TodoQueryDto, TodoUpdateDto } from './todo.dto'
 import { TodoService } from './todo.service'
+import { ApiSecurityAuth } from '~/common/decorators/swagger.decorator'
 
 export const permissions = definePermission('todo', {
   LIST: 'list',
@@ -32,6 +33,7 @@ export const permissions = definePermission('todo', {
 } as const)
 
 @ApiTags('Business - Todo模块')
+@ApiSecurityAuth()
 @UseGuards(ResourceGuard)
 @Controller('todos')
 export class TodoController {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 
-import { Like, Repository } from 'typeorm'
+import { In, Like, Repository } from 'typeorm'
 
 import { paginate } from '~/helper/paginate'
 import { Pagination } from '~/helper/paginate/pagination'
@@ -84,5 +84,15 @@ export class DictItemService {
    */
   async findOne(id: number): Promise<DictItemEntity> {
     return this.dictItemRepository.findOneBy({ id })
+  }
+  /**
+   * 查询多个
+   */
+  async findMany(ids:number[]){
+    return this.dictItemRepository.find({
+      where:{
+        id:In(ids)
+      }
+    })
   }
 }

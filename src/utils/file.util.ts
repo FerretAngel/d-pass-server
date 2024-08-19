@@ -1,16 +1,18 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { generateShortUUID } from './tool.util'
 
 import { MultipartFile } from '@fastify/multipart'
 
 import dayjs from 'dayjs'
+import { exec } from 'child_process'
 
-enum Type {
-  IMAGE = '图片',
-  TXT = '文档',
-  MUSIC = '音乐',
-  VIDEO = '视频',
-  OTHER = '其他',
+export enum Type {
+  IMAGE = 'Images',
+  TXT = 'document',
+  MUSIC = 'music',
+  VIDEO = 'video',
+  OTHER = 'other',
 }
 
 export function getFileType(extName: string) {
@@ -18,7 +20,7 @@ export function getFileType(extName: string) {
   const music = 'mp3 wav wma mpa ram ra aac aif m4a'
   const video = 'avi mpg mpe mpeg asf wmv mov qt rm mp4 flv m4v webm ogv ogg'
   const image
-    = 'bmp dib pcp dif wmf gif jpg tif eps psd cdr iff tga pcd mpt png jpeg'
+    = 'bmp dib pcp dif wmf gif jpg tif eps psd cdr iff tga pcd mpt png jpeg webp'
   if (image.includes(extName))
     return Type.IMAGE
 
@@ -59,10 +61,10 @@ export function getSize(bytes: number, decimals = 2) {
 }
 
 export function fileRename(fileName: string) {
-  const name = fileName.split('.')[0]
+  // const name = fileName.split('.')[0]
   const extName = path.extname(fileName)
-  const time = dayjs().format('YYYYMMDDHHmmSSS')
-  return `${name}-${time}${extName}`
+  const time = dayjs().format('YYYY_MM_DD_HHmmSSS')
+  return `${generateShortUUID().toUpperCase()}_${time}${extName}`
 }
 
 export function getFilePath(name: string, currentDate: string, type: string) {
@@ -94,4 +96,48 @@ export async function deleteFile(name: string) {
   fs.unlink(path.join(__dirname, '../../', 'public', name), () => {
     // console.log(error);
   })
+}
+export function getCommand(type: string, orginUrl: string, webpUrl: string, quliaity = 100) {
+  const reallyOriginUrl = path.join(__dirname, '../../', 'public', orginUrl)
+  const reallywebpUrl = path.join(__dirname, '../../', 'public', webpUrl)
+  switch (type) {
+    // case 'webp':
+    //   return `cp ${orginUrl} ${webpUrl}`;
+    case 'gif':
+      return `ffmpeg -i ${reallyOriginUrl} -c:v libwebp -loop 0 -lossless ${
+        quliaity / 100
+      } ${reallywebpUrl} -y`;
+    default:
+      return `ffmpeg -i ${reallyOriginUrl} -q:v ${quliaity} ${reallywebpUrl} -y`;
+  }
+}
+
+export function runCommand(command: string) {
+  return new Promise((resolve, reject) => {
+    exec(command, (err, stdout) => {
+      if (err) {
+        console.error(err);
+        reject(
+          new Error(
+            `转换图片失败:${command.replaceAll('\\', '/')}，错误信息:${stdout}`,
+          ),
+        );
+      }
+      resolve(true);
+    });
+  });
+}
+
+export function imageToWebp(orginUrl: string, webpUrl: string) {
+  return new Promise(async (resolve, reject) => {
+    const type = path.extname(orginUrl).slice(1);
+    const command = getCommand(type, orginUrl, webpUrl);
+    exec(command, (err, stdout) => {
+      if (err) {
+        console.error(err);
+        reject(new Error(`转换图片失败:${command}，错误信息:${stdout}`));
+      }
+      resolve(true);
+    });
+  });
 }
