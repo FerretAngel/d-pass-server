@@ -33,6 +33,7 @@ import { DatabaseModule } from './shared/database/database.module'
 import { SocketModule } from './socket/socket.module'
 import { WorldModule } from './modules/world/world.module';
 import { CardModule } from './modules/card/card.module';
+import { ComicModule } from './modules/comic/comic.module';
 
 @Module({
   imports: [
@@ -94,6 +95,8 @@ import { CardModule } from './modules/card/card.module';
     WorldModule,
 
     CardModule,
+
+    ComicModule,
 
   ],
   providers: [
