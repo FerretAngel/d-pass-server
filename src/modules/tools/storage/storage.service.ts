@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Between, Like, Repository } from 'typeorm'
+import { Between, In, Like, Repository } from 'typeorm'
 
 import { paginateRaw } from '~/helper/paginate'
 import { PaginationTypeEnum } from '~/helper/paginate/interface'
@@ -20,6 +20,18 @@ export class StorageService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
   ) {}
+
+  async findOne(id:number){
+    return this.storageRepository.findOne({
+      where:{id}
+    })
+  }
+
+  async findMany(ids:number[]){
+    return this.storageRepository.find({
+      where:{id:In(ids)}
+    })
+  }
 
   async create(dto: StorageCreateDto, userId: number): Promise<void> {
     await this.storageRepository.save({

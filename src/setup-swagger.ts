@@ -38,6 +38,7 @@ export function setupSwagger(
   })
 
   SwaggerModule.setup(path, app, document, {
+    jsonDocumentUrl:`/${path}/json`,
     swaggerOptions: {
       persistAuthorization: true, // 保持登录
     },

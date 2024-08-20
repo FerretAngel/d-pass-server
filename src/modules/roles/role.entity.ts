@@ -4,28 +4,29 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
 import { CommonEntity } from '~/common/entity/common.entity'
 
 import { Storage } from '../tools/storage/storage.entity'
+import { Region } from '../region/entities/region.entity'
+import { Novel } from '../novel/entities/novel.entity'
 
 @Entity('roles')
 export class Role extends CommonEntity {
-  @Column()
+  @OneToOne(()=>Novel)
   @ApiProperty({ description: '小说ID' })
-  novelId: number // 小说id
+  @JoinColumn({name:'novel_id'})
+  novel: Novel // 小说id
 
   @Column({ default: '默认角色' })
   @ApiProperty({ description: '角色名称' })
   name: string // 角色名称
 
-  @Column()
   @ApiProperty({ description: '头像ID' })
   @OneToOne(() => Storage)
-  @JoinColumn({ name: 'avatarId' })
-  avatar: number // 头像
+  @JoinColumn({ name: 'avatar_id' })
+  avatar: Storage // 头像
 
-  @Column()
   @OneToOne(() => Storage)
-  @JoinColumn({ name: 'drawingId' })
+  @JoinColumn({ name: 'drawing_id' })
   @ApiProperty({ description: '画像ID' })
-  drawing: number // 画像
+  drawing: Storage // 画像
 
   @Column()
   age: number // 年龄
@@ -42,8 +43,9 @@ export class Role extends CommonEntity {
   @Column()
   describe: string // 描述
 
-  @Column()
-  regionId: number // 所属区域ID
+  @OneToOne(()=>Region)
+  @JoinColumn({name:'region_id'})
+  region:Region
 
   @Column()
   hobby: string // 爱好

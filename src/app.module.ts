@@ -31,6 +31,8 @@ import { ToolsModule } from './modules/tools/tools.module'
 import { DatabaseModule } from './shared/database/database.module'
 
 import { SocketModule } from './socket/socket.module'
+import { WorldModule } from './modules/world/world.module';
+import { CardModule } from './modules/card/card.module';
 
 @Module({
   imports: [
@@ -88,6 +90,10 @@ import { SocketModule } from './socket/socket.module'
     NovelModule,
 
     RegionModule,
+
+    WorldModule,
+
+    CardModule,
 
   ],
   providers: [

@@ -1,27 +1,30 @@
 import { Injectable } from '@nestjs/common'
 
-import { CreateRoleDto } from './dto/create-role.dto'
-import { UpdateRoleDto } from './dto/update-role.dto'
+import { BaseService } from '~/helper/crud/base.service'
+import { Role } from './role.entity'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { StorageService } from '../tools/storage/storage.service'
+import { RegionService } from '../region/region.service'
+import { NovelService } from '../novel/novel.service'
 
 @Injectable()
-export class RolesService {
-  create(createRoleDto: CreateRoleDto) {
-    return 'This action adds a new role'
-  }
-
-  findAll() {
-    return `This action returns all roles`
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} role`
-  }
-
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} role`
+export class RolesService extends BaseService<Role> {
+  constructor(
+    @InjectRepository(Role)
+    private readonly roleRepository:Repository<Role>,
+    readonly storageService:StorageService,
+    readonly regionService:RegionService,
+    readonly novelService:NovelService,
+  ){
+    super(roleRepository,{
+      relations:['novel','avatar','drawing','region'],
+      relationsFindFunc:{
+        novel:({id})=>novelService.findOne(id),
+        avatar:({id})=>storageService.findOne(id),
+        drawing:({id})=>storageService.findOne(id),
+        region:({id})=>regionService.findOne(id),
+      }
+    })
   }
 }

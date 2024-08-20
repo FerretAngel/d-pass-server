@@ -3,14 +3,13 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IdParam } from '~/common/decorators/id-param.decorator';
 import { AuthUser } from '../auth/decorators/auth-user.decorator';
 import { Public } from '../auth/decorators/public.decorator';
-import { RolesService as Service } from './roles.service';
-import { CreateRoleDto as Dto } from './dto/create-role.dto';
 import { QueryDto, QueryPage } from '~/common/decorators/query.decorator';
-import { Role } from './role.entity';
+import { CardService as Service } from './card.service';
+import { Card,CardDto as Dto } from './card';
 
-@Controller('role')
-@ApiTags('role-角色模块')
-export class RolesController {
+@Controller('card')
+@ApiTags('Card-卡片模块')
+export class CardController {
   constructor(private readonly service: Service) {}
 
   @Post()
@@ -21,7 +20,7 @@ export class RolesController {
 
   @Get()
   @ApiOperation({summary:'列表查询'})
-  findAll(@QueryPage() query:QueryDto<Role>) {
+  findAll(@QueryPage() query:QueryDto<Card>) {
     return this.service.findAll(query);
   }
 

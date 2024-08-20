@@ -1,7 +1,10 @@
-import { ApiProperty, IntersectionType, PartialType } from '@nestjs/swagger'
-import { IsArray, IsInt, IsNotEmpty, IsString } from 'class-validator'
+import { ApiProperty} from '@nestjs/swagger'
+import { IsArray, IsInt, IsNotEmpty, IsString, ValidateNested } from 'class-validator'
 
-import { PagerDto } from '~/common/dto/pager.dto'
+import { Type } from 'class-transformer';
+import { Storage } from '../tools/storage/storage.entity';
+import { DictItemEntity } from '../system/dict-item/dict-item.entity';
+import { IdDto } from '~/common/dto/id.dto';
 
 export class NovelDto {
   @ApiProperty({ description: '名称' })
@@ -9,18 +12,15 @@ export class NovelDto {
   @IsString()
   name: string
 
-  @ApiProperty({ description: '封面ID' })
+  @ApiProperty({ description: '封面' })
   @IsNotEmpty()
-  @IsInt()
-  cover_id: number
+  @ValidateNested()
+  @Type(() => IdDto)
+  cover: Storage;
 
   @ApiProperty({ description: 'tags' })
   @IsArray()
-  @IsNotEmpty()
-  @IsInt({ each: true })
-  tags: number[]
+  @ValidateNested({each:true})
+  @Type(() => IdDto)
+  tags: DictItemEntity[]
 }
-
-export class NovelUpdateDto extends PartialType(NovelDto) {}
-
-export class NovelQueryDto extends IntersectionType(PagerDto, NovelDto) {}

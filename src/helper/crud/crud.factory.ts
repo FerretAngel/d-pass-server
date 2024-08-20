@@ -47,7 +47,7 @@ export function BaseCrudFactory<
   } as const
 
   @Controller(pluralizeName)
-  class BaseController<S extends BaseService<E>> {
+  class BaseController<S extends BaseService<any>> {
     constructor(private service: S) { }
 
     @Get()

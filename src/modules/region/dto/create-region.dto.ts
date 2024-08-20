@@ -1,20 +1,36 @@
-import { IntersectionType, PartialType } from '@nestjs/swagger'
-import { IsNotEmpty } from 'class-validator'
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator'
+import { Region } from '../entities/region.entity'
+import { Type } from 'class-transformer'
+import { ApiProperty } from '@nestjs/swagger';
+import { Storage } from '~/modules/tools/storage/storage.entity';
 
-import { PagerDto } from '~/common/dto/pager.dto'
-import { NovelDto } from '~/modules/novel/novel.dto'
+class EntityIdDto{
+  @ApiProperty({ description: 'ID' })
+  @IsNotEmpty()
+  @IsInt()
+  id: number;
+}
 
 export class CreateRegionDto {
-  @IsNotEmpty()
-  novel_id: number
+  // @IsNotEmpty()
+  // @IsNumber()
+  // novel_id: number
 
   @IsNotEmpty()
+  @IsString()
   name: string
 
-  parentId?: number
-  avatar_id?: number
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => EntityIdDto)
+  parent?:Region
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => EntityIdDto)
+  avatar?:Storage
+  
+  @IsOptional()
+  @IsString()
   remark?: string
 }
-export class RegionUpdateDto extends PartialType(NovelDto) {}
-
-export class RegionQueryDto extends IntersectionType(PagerDto, NovelDto) {}
