@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Patch, Post, Put, Query } from '@nestjs/common'
 
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 

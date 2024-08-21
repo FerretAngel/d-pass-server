@@ -12,6 +12,10 @@ export class NovelDto {
   @IsString()
   name: string
 
+  @IsNotEmpty({message:'describe是必须的'})
+  @IsString()
+  describe:string
+
   @ApiProperty({ description: '封面' })
   @IsNotEmpty()
   @ValidateNested()
@@ -23,4 +27,6 @@ export class NovelDto {
   @ValidateNested({each:true})
   @Type(() => IdDto)
   tags: DictItemEntity[]
+
+  
 }

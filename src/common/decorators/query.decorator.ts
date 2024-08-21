@@ -85,12 +85,12 @@ export class QueryDto<T extends CommonEntity>{
   getReturn<T>(data: T[], total: number) {
     const { page, pageSize, params, isOr } = this;
     return {
-      pagenation: { page, pageSize, total },
+      meta: { currentPage:page, pageSize, totalItems:total },
       params: {
         ...params,
         or: isOr,
       },
-      list: data,
+      items: data,
     };
   }
 }

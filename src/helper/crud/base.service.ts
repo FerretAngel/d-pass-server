@@ -12,12 +12,12 @@ import { QueryDto } from '~/common/decorators/query.decorator'
 export class BaseService<E extends CommonEntity, R extends Repository<E> = Repository<E>> {
   constructor(
     private repository: R,
-    private readonly param:{
-      relations:(keyof E)[],
+    private readonly param: {
+      relations: (keyof E)[],
       relationsFindFunc: {
-        [K in keyof E]?: (param:E[K]) => Promise<E[K]>
+        [K in keyof E]?: (param: E[K]) => Promise<E[K]>
       }
-    }={relations:[],relationsFindFunc:{}}
+    } = { relations: [], relationsFindFunc: {} }
   ) {
   }
 
@@ -61,32 +61,20 @@ export class BaseService<E extends CommonEntity, R extends Repository<E> = Repos
     })
   }
 
-  // async create(dto: Partial<E>) {
-  //   const {relations} = this
-  //   const createData={}
-  //   Object.keys(dto).forEach((key)=>{
-  //     const value = dto[key]
-  //     if(relations.includes(key)){
-
-  //     }
-  //   })
-  //   // return await this.repository.save(dto)
-  // }
   async create(dto: Partial<E>) {
     const { relations, relationsFindFunc } = this.param;
     const createData: any = {};
 
     for (const [key, value] of Object.entries(dto)) {
-      if (typeof value === 'object' &&
-        Object.hasOwn(value, 'id') &&
-        relations.includes(key as keyof E) &&
+      if (value && relations.includes(key as keyof E) &&
         relationsFindFunc[key as keyof E]) {
-        createData[key as keyof E] = await relationsFindFunc[key as keyof E]!(value);
+        const res = await relationsFindFunc[key as keyof E]!(value);
+        createData[key as keyof E] = res
       } else {
         createData[key as keyof E] = value as E[keyof E];
       }
     }
-
+    console.log(createData);
     return await this.repository.save(createData);
   }
 
@@ -99,16 +87,14 @@ export class BaseService<E extends CommonEntity, R extends Repository<E> = Repos
     }
     const updateData: any = { ...existingEntity };
     for (const [key, value] of Object.entries(dto)) {
-      if (typeof value === 'object' &&
-        Object.hasOwn(value, 'id') &&
-        relations.includes(key as keyof E) &&
+      if (value && relations.includes(key as keyof E) &&
         relationsFindFunc[key as keyof E]) {
         updateData[key as keyof E] = await relationsFindFunc[key as keyof E]!(value);
       } else {
         updateData[key as keyof E] = value as E[keyof E];
       }
     }
-    return await this.repository.update(id,updateData);
+    return await this.repository.save(updateData);
   }
 
   async delete(id: number): Promise<void> {
