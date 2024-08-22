@@ -12,7 +12,7 @@ import { QueryDto } from '~/common/decorators/query.decorator'
 export class BaseService<E extends CommonEntity, R extends Repository<E> = Repository<E>> {
   constructor(
     private repository: R,
-    private readonly param: {
+    readonly param: {
       relations: (keyof E)[],
       relationsFindFunc: {
         [K in keyof E]?: (param: E[K]) => Promise<E[K]>
@@ -74,7 +74,6 @@ export class BaseService<E extends CommonEntity, R extends Repository<E> = Repos
         createData[key as keyof E] = value as E[keyof E];
       }
     }
-    console.log(createData);
     return await this.repository.save(createData);
   }
 

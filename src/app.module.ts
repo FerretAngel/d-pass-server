@@ -34,6 +34,8 @@ import { SocketModule } from './socket/socket.module'
 import { WorldModule } from './modules/world/world.module';
 import { CardModule } from './modules/card/card.module';
 import { ComicModule } from './modules/comic/comic.module';
+import { ArticleModule } from './modules/article/article.module';
+import { InfoModule } from './modules/info/info.module';
 
 @Module({
   imports: [
@@ -97,6 +99,10 @@ import { ComicModule } from './modules/comic/comic.module';
     CardModule,
 
     ComicModule,
+
+    ArticleModule,
+
+    InfoModule,
 
   ],
   providers: [
