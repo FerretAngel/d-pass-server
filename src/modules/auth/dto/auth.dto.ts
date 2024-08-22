@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-import { IsString, Matches, MaxLength, MinLength } from 'class-validator'
+import { IsEmail, IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 export class LoginDto {
   @ApiProperty({ description: '邮箱' })
   @IsString()
-  @MinLength(4)
+  @IsEmail()
   username: string
 
   @ApiProperty({ description: '密码', example: 'a123456' })
@@ -27,7 +27,8 @@ export class LoginDto {
 }
 
 export class RegisterDto {
-  @ApiProperty({ description: '账号' })
+  @ApiProperty({ description: '账号(邮箱)' })
+  @IsEmail()
   @IsString()
   username: string
 
@@ -38,7 +39,13 @@ export class RegisterDto {
   @MaxLength(16)
   password: string
 
-  @ApiProperty({ description: '语言', examples: ['EN', 'ZH'] })
+  @ApiProperty({description:'邮验证码'})
   @IsString()
-  lang: string
+  @MaxLength(4)
+  @MinLength(4)
+  code:string
+  
+  @ApiProperty({ description: '验证码标识' })
+  @IsString()
+  token:string
 }

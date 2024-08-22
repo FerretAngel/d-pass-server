@@ -13,6 +13,7 @@ import { LocalGuard } from './guards/local.guard'
 import { LoginToken } from './models/auth.model'
 import { CaptchaService } from './services/captcha.service'
 import { BusinessException } from '~/common/exceptions/biz.exception'
+import { MailerService } from '~/shared/mailer/mailer.service'
 
 @ApiTags('Auth - 认证模块')
 @UseGuards(LocalGuard)
@@ -23,6 +24,8 @@ export class AuthController {
     private authService: AuthService,
     private userService: UserService,
     private captchaService: CaptchaService,
+    private mailerService:MailerService,
+
   ) { }
 
   @Post('login')
@@ -30,7 +33,6 @@ export class AuthController {
   @ApiResult({ type: LoginToken })
   async login(@Body() dto: LoginDto, @Ip() ip: string, @Headers('user-agent') ua: string): Promise<LoginToken> {
     // await this.captchaService.checkImgCaptcha(dto.captchaId, dto.verifyCode)
-    console.log(ua)
     try {
       const { success, 'error-codes': errorCodes } = await this.captchaService.check(dto.token);
       if (!success) throw new BusinessException(`人机验证失败:${errorCodes.join(',')}`);
@@ -49,6 +51,13 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: '注册' })
   async register(@Body() dto: RegisterDto): Promise<void> {
+    try {
+      const { success, 'error-codes': errorCodes } = await this.captchaService.check(dto.token);
+      if (!success) throw new BusinessException(`人机验证失败:${errorCodes.join(',')}`);
+    } catch (error) {
+      throw new BusinessException('人机验证失败：网络错误')
+    }
+    await this.mailerService.checkCode(dto.username,dto.code)
     await this.userService.register(dto)
   }
 }

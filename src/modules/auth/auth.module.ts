@@ -24,6 +24,7 @@ import { CaptchaService } from './services/captcha.service'
 import { TokenService } from './services/token.service'
 import { JwtStrategy } from './strategies/jwt.strategy'
 import { LocalStrategy } from './strategies/local.strategy'
+import { MailerModule } from '~/shared/mailer/mailer.module'
 
 const controllers = [
   AuthController,
@@ -58,6 +59,7 @@ const strategies = [LocalStrategy, JwtStrategy]
     RoleModule,
     MenuModule,
     LogModule,
+    MailerModule
   ],
   controllers: [...controllers],
   providers: [...providers, ...strategies],

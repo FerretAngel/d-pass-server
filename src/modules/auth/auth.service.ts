@@ -19,6 +19,7 @@ import { MenuService } from '../system/menu/menu.service'
 import { RoleService } from '../system/role/role.service'
 
 import { TokenService } from './services/token.service'
+import { MailerService } from '~/shared/mailer/mailer.service'
 
 @Injectable()
 export class AuthService {
