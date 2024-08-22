@@ -14,7 +14,7 @@ export class Novel extends CommonEntity {
   @JoinColumn({ name: 'user_id' })
   author: Relation<UserEntity> // 作者id
 
-  @OneToOne(() => Storage)
+  @ManyToOne(() => Storage)
   @JoinColumn({ name: 'cover_id' })
   cover: Relation<Storage> // 封面
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm'
 
 import { CommonEntity } from '~/common/entity/common.entity'
 
@@ -9,7 +9,7 @@ import { Novel } from '../novel/entities/novel.entity'
 
 @Entity('roles')
 export class Role extends CommonEntity {
-  @OneToOne(()=>Novel)
+  @ManyToOne(()=>Novel)
   @ApiProperty({ description: '小说ID' })
   @JoinColumn({name:'novel_id'})
   novel: Novel // 小说id
@@ -19,11 +19,11 @@ export class Role extends CommonEntity {
   name: string // 角色名称
 
   @ApiProperty({ description: '头像ID' })
-  @OneToOne(() => Storage)
+  @ManyToOne(() => Storage)
   @JoinColumn({ name: 'avatar_id' })
   avatar: Storage // 头像
 
-  @OneToOne(() => Storage)
+  @ManyToOne(() => Storage)
   @JoinColumn({ name: 'drawing_id' })
   @ApiProperty({ description: '画像ID' })
   drawing: Storage // 画像
@@ -43,16 +43,16 @@ export class Role extends CommonEntity {
   @Column()
   describe: string // 描述
 
-  @OneToOne(()=>Region)
+  @ManyToOne(()=>Region)
   @JoinColumn({name:'region_id'})
   region:Region
 
-  @Column()
+  @Column({default:''})
   hobby: string // 爱好
 
-  @Column()
+  @Column({default:''})
   ability: string // 能力
 
-  @Column()
+  @Column({default:''})
   occupation: string // 职业
 }

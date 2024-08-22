@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, Relation } from "typeorm";
 import { CommonEntity } from "~/common/entity/common.entity";
 import { Novel } from "../novel/entities/novel.entity";
 import { UserEntity } from "../user/user.entity";
@@ -9,7 +9,7 @@ import { IdDto } from "~/common/dto/id.dto";
 
 @Entity()
 export class Comic extends CommonEntity{
-  @OneToOne(()=>Novel)
+  @ManyToOne(()=>Novel)
   @JoinColumn({name:'novel_id'})
   novel:Relation<Novel>
   @Column()

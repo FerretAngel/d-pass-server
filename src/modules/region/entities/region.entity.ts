@@ -6,14 +6,14 @@ import { Storage } from '~/modules/tools/storage/storage.entity'
 
 @Entity()
 export class Region extends CommonEntity {
-  @OneToOne(() => Novel, novel => novel.id)
+  @ManyToOne(() => Novel)
   @JoinColumn({ name: 'novel_id' })
   novel: Novel
 
   @Column()
   name: string
 
-  @OneToOne(() => Storage, entity => entity.id)
+  @ManyToOne(() => Storage)
   @JoinColumn({
     name: 'avatar_id',
   })

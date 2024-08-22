@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, Relation } from "typeorm";
+import { Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, Relation } from "typeorm";
 import { CommonEntity } from "~/common/entity/common.entity";
 import { Novel } from "../novel/entities/novel.entity";
 import { Storage } from "../tools/storage/storage.entity";
@@ -9,7 +9,7 @@ import { Optional } from "@nestjs/common";
 
 @Entity()
 export class World extends CommonEntity{
-  @OneToOne(()=>Novel)
+  @ManyToOne(()=>Novel)
   @JoinColumn({name:'novel_id'})
   novel:Relation<Novel>
   @ManyToMany(()=>Storage)

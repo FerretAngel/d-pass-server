@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, OneToOne } from "typeorm";
+import { Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
 import { CommonEntity } from "~/common/entity/common.entity";
 import { Storage } from "../tools/storage/storage.entity";
 import { IsNotEmpty, ValidateNested } from "class-validator";
@@ -7,10 +7,10 @@ import { IdDto } from "~/common/dto/id.dto";
 
 @Entity()
 export class Card extends CommonEntity{
-  @OneToOne(()=>Storage)
+  @ManyToOne(()=>Storage)
   @JoinColumn({name:'face_id'})
   face:Storage
-  @OneToOne(()=>Storage)
+  @ManyToOne(()=>Storage)
   @JoinColumn({name:'back_id'})
   back:Storage
 }
