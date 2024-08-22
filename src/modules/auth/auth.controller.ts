@@ -33,12 +33,7 @@ export class AuthController {
   @ApiResult({ type: LoginToken })
   async login(@Body() dto: LoginDto, @Ip() ip: string, @Headers('user-agent') ua: string): Promise<LoginToken> {
     // await this.captchaService.checkImgCaptcha(dto.captchaId, dto.verifyCode)
-    try {
-      const { success, 'error-codes': errorCodes } = await this.captchaService.check(dto.token);
-      if (!success) throw new BusinessException(`人机验证失败:${errorCodes.join(',')}`);
-    } catch (error) {
-      throw new BusinessException('人机验证失败：网络错误')
-    }
+    await this.captchaService.checkRecapcha(dto.token)
     const token = await this.authService.login(
       dto.username,
       dto.password,
@@ -51,12 +46,7 @@ export class AuthController {
   @Post('register')
   @ApiOperation({ summary: '注册' })
   async register(@Body() dto: RegisterDto): Promise<void> {
-    try {
-      const { success, 'error-codes': errorCodes } = await this.captchaService.check(dto.token);
-      if (!success) throw new BusinessException(`人机验证失败:${errorCodes.join(',')}`);
-    } catch (error) {
-      throw new BusinessException('人机验证失败：网络错误')
-    }
+    await this.captchaService.checkRecapcha(dto.token)
     await this.mailerService.checkCode(dto.username,dto.code)
     await this.userService.register(dto)
   }

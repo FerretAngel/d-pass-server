@@ -61,4 +61,13 @@ export class CaptchaService {
     };
     return json;
   }
+
+  async checkRecapcha(token:string){
+    try {
+      const { success, 'error-codes': errorCodes } = await this.check(token);
+      if (!success) throw new BusinessException(`1002:人机验证失败:${errorCodes.join(',')}`);
+    } catch (error) {
+      throw new BusinessException('1002:人机验证失败：网络错误')
+    }
+  }
 }

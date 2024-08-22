@@ -16,4 +16,6 @@ export class EmailSendDto {
   @ApiProperty({ description: '正文' })
   @IsString()
   content: string
+
+ 
 }

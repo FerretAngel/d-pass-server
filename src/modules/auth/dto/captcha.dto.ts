@@ -34,6 +34,10 @@ export class SendEmailCodeDto {
   @ApiProperty({ description: '邮箱' })
   @IsEmail({}, { message: '邮箱格式不正确' })
   email: string
+
+  @ApiProperty({ description: '人机验证码' })
+  @IsString()
+  token: string
 }
 
 export class SendSmsCodeDto {
