@@ -14,8 +14,9 @@ export class LoginDto {
   @MinLength(6)
   password: string
 
-  // @ApiProperty({ description: '验证码标识' })
-  // @IsString()
+  @ApiProperty({ description: '验证码标识' })
+  @IsString()
+  token:string
   // captchaId: string
 
   // @ApiProperty({ description: '用户输入的验证码' })

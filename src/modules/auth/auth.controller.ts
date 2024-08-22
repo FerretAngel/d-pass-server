@@ -12,6 +12,7 @@ import { LoginDto, RegisterDto } from './dto/auth.dto'
 import { LocalGuard } from './guards/local.guard'
 import { LoginToken } from './models/auth.model'
 import { CaptchaService } from './services/captcha.service'
+import { BusinessException } from '~/common/exceptions/biz.exception'
 
 @ApiTags('Auth - 认证模块')
 @UseGuards(LocalGuard)
@@ -22,15 +23,20 @@ export class AuthController {
     private authService: AuthService,
     private userService: UserService,
     private captchaService: CaptchaService,
-  ) {}
+  ) { }
 
   @Post('login')
   @ApiOperation({ summary: '登录' })
   @ApiResult({ type: LoginToken })
-  async login(@Body() dto: LoginDto, @Ip()ip: string, @Headers('user-agent')ua: string): Promise<LoginToken> {
+  async login(@Body() dto: LoginDto, @Ip() ip: string, @Headers('user-agent') ua: string): Promise<LoginToken> {
     // await this.captchaService.checkImgCaptcha(dto.captchaId, dto.verifyCode)
     console.log(ua)
-
+    try {
+      const { success, 'error-codes': errorCodes } = await this.captchaService.check(dto.token);
+      if (!success) throw new BusinessException(`人机验证失败:${errorCodes.join(',')}`);
+    } catch (error) {
+      throw new BusinessException('人机验证失败：网络错误')
+    }
     const token = await this.authService.login(
       dto.username,
       dto.password,

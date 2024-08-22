@@ -37,4 +37,28 @@ export class CaptchaService {
   ): Promise<void> {
     await this.captchaLogService.create(account, code, provider, uid)
   }
+  async check(code: string) {
+    const CAPTCHA_KEY = '6LdBwmYpAAAAAF1juIKnLQ7kuTRegcMyz2DhE10o';
+    const url = `https://recaptcha.net/recaptcha/api/siteverify`;
+    const data = {
+      secret: CAPTCHA_KEY,
+      response: code,
+    };
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(data),
+    });
+    const json = (await res.json()) as {
+      success: boolean;
+      challenge_ts: string;
+      hostname: string;
+      score: number;
+      action: 'submit';
+      'error-codes'?: string[];
+    };
+    return json;
+  }
 }
