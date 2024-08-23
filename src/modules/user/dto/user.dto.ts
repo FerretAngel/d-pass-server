@@ -83,6 +83,13 @@ export class UserDto {
   status: number
 }
 
+export class UserUpdateSelfDto {
+  @ApiProperty({ description: '呢称', example: 'admin' })
+  @IsOptional()
+  @IsString()
+  nickname: string
+}
+
 export class UserUpdateDto extends PartialType(UserDto) {}
 
 export class UserQueryDto extends IntersectionType(PagerDto<UserDto>, PartialType(UserDto)) {

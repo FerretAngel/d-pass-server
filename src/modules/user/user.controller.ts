@@ -12,6 +12,7 @@ import { UserPasswordDto } from './dto/password.dto'
 import { UserDto, UserQueryDto, UserUpdateDto } from './dto/user.dto'
 import { UserEntity } from './user.entity'
 import { UserService } from './user.service'
+import { AuthUser } from '../auth/decorators/auth-user.decorator'
 
 export const permissions = definePermission('system:user', {
   LIST: 'list',
@@ -19,7 +20,7 @@ export const permissions = definePermission('system:user', {
   READ: 'read',
   UPDATE: 'update',
   DELETE: 'delete',
-
+  UPDATE_SELF:'update:self',
   PASSWORD_UPDATE: 'password:update',
   PASSWORD_RESET: 'pass:reset',
 } as const)
@@ -54,7 +55,13 @@ export class UserController {
   async create(@Body() dto: UserDto): Promise<void> {
     await this.userService.create(dto)
   }
-
+  @Put(':id')
+  @ApiOperation({ summary: '用户更新用户信息' })
+  @Perm(permissions.UPDATE_SELF)
+  async updateSelf(@AuthUser() {uid:id}: IAuthUser, @Body() dto: UserUpdateDto): Promise<void> {
+    await this.userService.update(id, dto)
+    await this.menuService.refreshPerms(id)
+  }
   @Put(':id')
   @ApiOperation({ summary: '更新用户' })
   @Perm(permissions.UPDATE)
@@ -62,6 +69,7 @@ export class UserController {
     await this.userService.update(id, dto)
     await this.menuService.refreshPerms(id)
   }
+  
 
   @Delete(':id')
   @ApiOperation({ summary: '删除用户' })

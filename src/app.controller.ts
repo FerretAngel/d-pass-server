@@ -8,6 +8,7 @@ import { DictItemService } from './modules/system/dict-item/dict-item.service';
 import { RolesService } from './modules/roles/roles.service';
 import { AuthUser } from './modules/auth/decorators/auth-user.decorator';
 import { Throttle } from '@nestjs/throttler';
+import { BusinessException } from './common/exceptions/biz.exception';
 
 
 
@@ -27,6 +28,7 @@ export class AppController {
   @ApiOperation({ summary: '全局搜索' })
   @Throttle({default:{ttl:1000,limit:1}})
   async search(@Param('key') key: string,@AuthUser() user: IAuthUser) {
+    if(!key) throw new BusinessException('400:搜索词为空')
     // 添加搜索记录
     this.dictItemService.create({
       typeId:2,
