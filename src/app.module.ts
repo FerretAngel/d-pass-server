@@ -36,6 +36,7 @@ import { CardModule } from './modules/card/card.module';
 import { ComicModule } from './modules/comic/comic.module';
 import { ArticleModule } from './modules/article/article.module';
 import { InfoModule } from './modules/info/info.module';
+import { AppController } from './app.controller'
 
 @Module({
   imports: [
@@ -51,7 +52,7 @@ import { InfoModule } from './modules/info/info.module';
       useFactory: () => ({
         errorMessage: '当前操作过于频繁，请稍后再试！',
         throttlers: [
-          { ttl: seconds(10), limit: 7 },
+          { ttl: seconds(10), limit: 10 },
         ],
       }),
     }),
@@ -105,6 +106,7 @@ import { InfoModule } from './modules/info/info.module';
     InfoModule,
 
   ],
+  controllers:[AppController],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
 

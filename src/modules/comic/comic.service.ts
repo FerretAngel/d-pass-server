@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BaseService } from '~/helper/crud/base.service';
 import { Comic } from './comic';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { NovelService } from '../novel/novel.service';
 import { StorageService } from '../tools/storage/storage.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +15,13 @@ export class ComicService extends BaseService<Comic> {
     readonly storageService:StorageService,
   ){
     super(comicRepository,{
+      searchParam(key) {
+        return {
+          where:{
+            title:Like(`%${key}%`)
+          }
+        }
+      },
       relations:['novel','images'],
       relationsFindFunc:{
         novel:({id})=>novelService.findOne(id),

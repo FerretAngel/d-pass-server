@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common'
-import { In, Repository } from 'typeorm'
+import { FindManyOptions, FindOptionsWhere, In, Like, Repository } from 'typeorm'
 
 import { PagerDto } from '~/common/dto/pager.dto'
 
@@ -9,15 +9,19 @@ import { paginate } from '../paginate'
 import { Pagination } from '../paginate/pagination'
 import { QueryDto } from '~/common/decorators/query.decorator'
 
+interface Config<E>{
+  searchParam?:(key:string)=>FindManyOptions<E>,
+  relations: (keyof E)[],
+  relationsFindFunc: {
+    [K in keyof E]?: (param: E[K]) => Promise<E[K]>
+  }
+}
+
 export class BaseService<E extends CommonEntity, R extends Repository<E> = Repository<E>> {
+  
   constructor(
     private repository: R,
-    readonly param: {
-      relations: (keyof E)[],
-      relationsFindFunc: {
-        [K in keyof E]?: (param: E[K]) => Promise<E[K]>
-      }
-    } = { relations: [], relationsFindFunc: {} }
+    readonly param: Config<E> = { relations: [], relationsFindFunc: {} }
   ) {
   }
 
@@ -99,5 +103,11 @@ export class BaseService<E extends CommonEntity, R extends Repository<E> = Repos
   async delete(id: number): Promise<void> {
     const item = await this.findOne(id)
     await this.repository.remove(item)
+  }
+
+  async search(key:string):Promise<E[]>{
+    const {searchParam} = this.param
+    if(typeof searchParam !=='function') return []
+    return this.repository.find(searchParam(key))
   }
 }

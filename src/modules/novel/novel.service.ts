@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 
 import { BaseService } from '~/helper/crud/base.service'
 
@@ -25,7 +25,14 @@ export class NovelService extends BaseService<Novel> {
         author:(user)=>userService.findUserById(user.id),
         cover:({id})=>storageService.findOne(id),
         tags:(tags)=>dictService.findMany(tags.map(item=>item.id))
-      }
+      },
+      searchParam(key) {
+        return {
+          where:{
+            name:Like(`%${key}%`)
+          }
+        }
+      },
     })
   }
 }
