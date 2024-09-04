@@ -39,6 +39,7 @@ export class Article extends CommonEntity{
 
 export class ArticleDto{
 
+  @IsNotEmpty({ message: '小说不能为空:novel' })
   @ValidateNested()
   @Type(()=>IdDto)
   novel:Novel

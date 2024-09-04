@@ -1,6 +1,7 @@
 import { Exclude } from 'class-transformer'
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -16,6 +17,13 @@ import { AccessTokenEntity } from '~/modules/auth/entities/access-token.entity'
 
 import { DeptEntity } from '~/modules/system/dept/dept.entity'
 import { RoleEntity } from '~/modules/system/role/role.entity'
+import { Region } from '../region/entities/region.entity'
+import { DictItemEntity } from '../system/dict-item/dict-item.entity'
+
+export enum UserSex{
+  male,
+  women
+}
 
 @Entity({ name: 'sys_user' })
 export class UserEntity extends CommonEntity {
@@ -66,4 +74,18 @@ export class UserEntity extends CommonEntity {
     cascade: true,
   })
   accessTokens: Relation<AccessTokenEntity[]>
+
+  @CreateDateColumn({ name: 'birthday' })
+  birthday:Date
+
+  @Column({default:UserSex.male})
+  sex:UserSex
+
+  @ManyToOne(()=>Region)
+  @JoinColumn({name:'region_id'})
+  region:Region
+  
+  @ManyToOne(()=>DictItemEntity)
+  @JoinColumn({name:'surnamed_id'})
+  surnamed:DictItemEntity
 }

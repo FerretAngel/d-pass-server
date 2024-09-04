@@ -57,10 +57,12 @@ export class Info extends CommonEntity{
 
 export class InfoDto{
 
+  @IsNotEmpty({ message: '小说不能为空:novel' })
   @ValidateNested()
   @Type(()=>IdDto)
   novel:Novel
 
+  @IsNotEmpty()
   @ValidateNested()
   @Type(()=>IdDto)
   cover:Storage
