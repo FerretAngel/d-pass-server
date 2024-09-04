@@ -26,9 +26,12 @@ import { RoleEntity } from '../system/role/role.entity'
 
 import { UserStatus } from './constant'
 import { PasswordUpdateDto } from './dto/password.dto'
-import { UserDto, UserQueryDto, UserUpdateDto } from './dto/user.dto'
+import { UserDto, UserQueryDto, UserUpdateDto, UserUpdateSelfDto } from './dto/user.dto'
 import { UserEntity } from './user.entity'
 import { AccountInfo } from './user.model'
+import { RegionService } from '../region/region.service'
+import { DictItemService } from '../system/dict-item/dict-item.service'
+import { Region } from '../region/entities/region.entity'
 
 @Injectable()
 export class UserService {
@@ -42,6 +45,9 @@ export class UserService {
     @InjectEntityManager() private entityManager: EntityManager,
     private readonly paramConfigService: ParamConfigService,
     private readonly qqService: QQService,
+    @InjectRepository(Region)
+    private readonly RegionRepository: Repository<Region>,
+    readonly dictItemService:DictItemService
   ) {}
 
   async findUserById(id: number): Promise<UserEntity | undefined> {
@@ -221,6 +227,31 @@ export class UserService {
         // 禁用状态
         await this.forbidden(id)
       }
+    })
+  }
+
+
+  async updateSelf(id:number,update:UserUpdateSelfDto){
+    const user = await this.userRepository.findOne({
+      where:{
+        id,
+      }
+    })
+    if(!user) throw new BadRequestException('用户不存在')
+    const {region,surnamed,...updateData} = update
+    if(region){
+      const _region = await this.RegionRepository.findOne({
+        where:{id:region.id}
+      })
+      _region && (user.region=_region)
+    }
+    if(surnamed){
+      const _surnamed = await this.dictItemService.findOne(surnamed.id)
+      _surnamed && (user.surnamed=_surnamed)
+    }
+    await this.userRepository.update(id,{
+      ...user,
+      ...updateData
     })
   }
 

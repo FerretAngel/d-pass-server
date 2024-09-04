@@ -1,12 +1,13 @@
-import { IsNotEmpty, IsNumber, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator";
 import { IdDto } from "~/common/dto/id.dto";
 import { Type } from "class-transformer";
 import { Storage } from "~/modules/tools/storage/storage.entity";
 import { Region } from "~/modules/region/entities/region.entity";
 import { Novel } from "~/modules/novel/entities/novel.entity";
+import { Optional } from "@nestjs/common";
 
 export class CreateRoleDto {
-  @IsNotEmpty({ message: '小说不能为空:novel_id' })
+  @IsNotEmpty({ message: '小说不能为空:novel' })
   @ValidateNested()
   @Type(() => IdDto)
   novel: Novel; // 小说id
@@ -37,7 +38,13 @@ export class CreateRoleDto {
   weight: number; // 体重
   @IsNotEmpty({ message: '简介不能为空:describe' })
   describe: string; // 描述
+  @Optional()
+  @IsString()
   hobby?: string; // 爱好
+  @Optional()
+  @IsString()
   ability?: string; // 能力
+  @Optional()
+  @IsString()
   occupation?: string; // 职业
 }

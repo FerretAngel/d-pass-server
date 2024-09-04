@@ -9,7 +9,7 @@ import { MenuService } from '~/modules/system/menu/menu.service'
 import { Perm, definePermission } from '../auth/decorators/permission.decorator'
 
 import { UserPasswordDto } from './dto/password.dto'
-import { UserDto, UserQueryDto, UserUpdateDto } from './dto/user.dto'
+import { UserDto, UserQueryDto, UserUpdateDto, UserUpdateSelfDto } from './dto/user.dto'
 import { UserEntity } from './user.entity'
 import { UserService } from './user.service'
 import { AuthUser } from '../auth/decorators/auth-user.decorator'
@@ -55,12 +55,11 @@ export class UserController {
   async create(@Body() dto: UserDto): Promise<void> {
     await this.userService.create(dto)
   }
-  @Put(':id')
+  @Put('self/:id')
   @ApiOperation({ summary: '用户更新用户信息' })
   @Perm(permissions.UPDATE_SELF)
-  async updateSelf(@AuthUser() {uid:id}: IAuthUser, @Body() dto: UserUpdateDto): Promise<void> {
-    await this.userService.update(id, dto)
-    await this.menuService.refreshPerms(id)
+  async updateSelf(@AuthUser() {uid:id}: IAuthUser, @Body() dto: UserUpdateSelfDto): Promise<void> {
+    await this.userService.updateSelf(id, dto)
   }
   @Put(':id')
   @ApiOperation({ summary: '更新用户' })

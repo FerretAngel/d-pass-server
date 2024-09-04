@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, forwardRef } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { MenuModule } from '../system/menu/menu.module'
@@ -9,15 +9,18 @@ import { RoleModule } from '../system/role/role.module'
 import { UserController } from './user.controller'
 import { UserEntity } from './user.entity'
 import { UserService } from './user.service'
+import { DictItemModule } from '../system/dict-item/dict-item.module'
+import { Region } from '../region/entities/region.entity'
 
 const providers = [UserService]
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity,Region]),
     RoleModule,
     MenuModule,
     ParamConfigModule,
+    DictItemModule,
   ],
   controllers: [UserController],
   providers: [...providers],

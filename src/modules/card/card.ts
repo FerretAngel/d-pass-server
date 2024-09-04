@@ -7,6 +7,7 @@ import { IdDto } from "~/common/dto/id.dto";
 
 @Entity()
 export class Card extends CommonEntity{
+  
   @ManyToOne(()=>Storage)
   @JoinColumn({name:'face_id'})
   face:Storage

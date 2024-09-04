@@ -4,19 +4,26 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   ArrayNotEmpty,
+  IsDateString,
   IsEmail,
   IsIn,
   IsInt,
+  IsNotEmpty,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
   ValidateIf,
+  ValidateNested,
 } from 'class-validator'
 import { isEmpty } from 'lodash'
+import { IdDto } from '~/common/dto/id.dto'
 
 import { PagerDto } from '~/common/dto/pager.dto'
+import { Region } from '~/modules/region/entities/region.entity'
+import { DictItemEntity } from '~/modules/system/dict-item/dict-item.entity'
+import { UserSex } from '../user.entity'
 
 export class UserDto {
   @ApiProperty({ description: '头像' })
@@ -84,10 +91,35 @@ export class UserDto {
 }
 
 export class UserUpdateSelfDto {
+  @IsOptional()
+  @IsString()
+  avatar?:string
+
   @ApiProperty({ description: '呢称', example: 'admin' })
   @IsOptional()
   @IsString()
-  nickname: string
+  @MaxLength(2)
+  nickname?: string
+
+  @ValidateIf(user=>typeof user.nickname ==='string')
+  @IsNotEmpty()
+  @ValidateNested()
+  @Type(()=>IdDto)
+  surnamed?:DictItemEntity
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(()=>IdDto)
+  region?:Region
+
+  @IsOptional()
+  @IsDateString()
+  birthday?:Date
+
+  @IsOptional()
+  @IsIn([UserSex.male,UserSex.women])
+  sex?:UserSex
+
 }
 
 export class UserUpdateDto extends PartialType(UserDto) {}
