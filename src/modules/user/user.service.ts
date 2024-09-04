@@ -32,6 +32,7 @@ import { AccountInfo } from './user.model'
 import { RegionService } from '../region/region.service'
 import { DictItemService } from '../system/dict-item/dict-item.service'
 import { Region } from '../region/entities/region.entity'
+import { RoleService } from '../system/role/role.service'
 
 @Injectable()
 export class UserService {
@@ -47,7 +48,8 @@ export class UserService {
     private readonly qqService: QQService,
     @InjectRepository(Region)
     private readonly RegionRepository: Repository<Region>,
-    readonly dictItemService:DictItemService
+    readonly dictItemService:DictItemService,
+    readonly roleService:RoleService
   ) {}
 
   async findUserById(id: number): Promise<UserEntity | undefined> {
@@ -403,9 +405,9 @@ export class UserService {
         status: 1,
         psalt: salt,
       })
-
+      const defaultRole = await this.roleService.getDefaultRole()
+      u.roles = [defaultRole]
       const user = await manager.save(u)
-
       return user
     })
   }

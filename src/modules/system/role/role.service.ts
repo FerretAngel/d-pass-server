@@ -167,4 +167,11 @@ export class RoleService {
       },
     })
   }
+  async getDefaultRole(): Promise<RoleEntity> {
+    return this.roleRepository.findOne({
+      where: {
+        default: true,
+      },
+    })
+  }
 }
