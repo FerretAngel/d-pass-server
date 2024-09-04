@@ -6,7 +6,15 @@ import { Public } from '../auth/decorators/public.decorator';
 import { QueryDto, QueryPage } from '~/common/decorators/query.decorator';
 import { CardService as Service } from './card.service';
 import { Card,CardDto as Dto } from './card';
+import { definePermission, Perm } from '../auth/decorators/permission.decorator';
 
+export const permissions = definePermission('card', {
+  LIST: 'list',
+  CREATE: 'create',
+  READ: 'read',
+  UPDATE: 'update',
+  DELETE: 'delete',
+} as const)
 @Controller('card')
 @ApiTags('Card-卡片模块')
 export class CardController {
@@ -14,30 +22,34 @@ export class CardController {
 
   @Post()
   @ApiOperation({summary:'新增'})
+  @Perm(permissions.CREATE)
   async create(@Body() dto: Dto,@AuthUser() user: IAuthUser) {
     return this.service.create(dto);
   }
 
   @Get()
   @ApiOperation({summary:'列表查询'})
+  @Perm(permissions.LIST)
   findAll(@QueryPage() query:QueryDto<Card>) {
     return this.service.findAll(query);
   }
 
   @Get(':id')
-  @Public()
+  @Perm(permissions.READ)
   @ApiOperation({summary:'查询详情'})
   findOne(@IdParam() id: number) {
     return this.service.findOne(id);
   }
 
   @Patch(':id')
+  @Perm(permissions.UPDATE)
   @ApiOperation({summary:'更新'})
   update(@IdParam() id: number, @Body() dto: Dto) {
     return this.service.update(id, dto);
   }
 
   @Delete(':id')
+  @Perm(permissions.DELETE)
   @ApiOperation({summary:'删除'})
   remove(@IdParam() id: number) {
     return this.service.delete(id);
