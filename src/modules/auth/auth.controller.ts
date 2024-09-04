@@ -34,13 +34,13 @@ export class AuthController {
   async login(@Body() dto: LoginDto, @Ip() ip: string, @Headers('user-agent') ua: string): Promise<LoginToken> {
     // await this.captchaService.checkImgCaptcha(dto.captchaId, dto.verifyCode)
     await this.captchaService.checkRecapcha(dto.token)
-    const token = await this.authService.login(
+    const {token,roles} = await this.authService.login(
       dto.username,
       dto.password,
       ip,
       ua,
     )
-    return { token }
+    return { token:token.accessToken ,roles}
   }
 
   @Post('register')
