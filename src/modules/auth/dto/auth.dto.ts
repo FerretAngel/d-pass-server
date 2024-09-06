@@ -49,3 +49,17 @@ export class RegisterDto {
   @IsString()
   token:string
 }
+export class LoginWithEmailDto {
+  @ApiProperty({ description: '邮箱' })
+  @IsString()
+  @IsEmail()
+  email: string
+
+  @ApiProperty({ description: '验证码标识' })
+  @IsString()
+  token:string
+
+  @ApiProperty({ description: '验证码' })
+  @IsString()
+  code: string
+}

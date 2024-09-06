@@ -32,7 +32,7 @@ export class AuthService {
     private tokenService: TokenService,
     @Inject(SecurityConfig.KEY) private securityConfig: ISecurityConfig,
     @Inject(AppConfig.KEY) private appConfig: IAppConfig,
-  ) {}
+  ) { }
 
   async validateUser(credential: string, password: string): Promise<any> {
     const user = await this.userService.findUserByUserName(credential)
@@ -70,6 +70,36 @@ export class AuthService {
     if (user.password !== comparePassword)
       throw new BusinessException(ErrorEnum.INVALID_USERNAME_PASSWORD)
 
+    const roleIds = await this.roleService.getRoleIdsByUser(user.id)
+
+    const roles = await this.roleService.getRoleValues(roleIds)
+
+    // 包含access_token和refresh_token
+    const token = await this.tokenService.generateAccessToken(user.id, roles)
+
+    await this.redis.set(genAuthTokenKey(user.id), token.accessToken, 'EX', this.securityConfig.jwtExprire)
+
+    // 设置密码版本号 当密码修改时，版本号+1
+    await this.redis.set(genAuthPVKey(user.id), 1)
+
+    // 设置菜单权限
+    const permissions = await this.menuService.getPermissions(user.id)
+    await this.setPermissionsCache(user.id, permissions)
+
+    await this.loginLogService.create(user.id, ip, ua)
+
+    return {
+      token,
+      roles
+    }
+  }
+  /**
+   * 邮箱登录
+   */
+  async loginWithEmail(email: string, ip: string,ua: string) {
+    const user = await this.userService.findUserByUserName(email)
+    if (isEmpty(user))
+      throw new BusinessException(ErrorEnum.USER_NOT_FOUND)
     const roleIds = await this.roleService.getRoleIdsByUser(user.id)
 
     const roles = await this.roleService.getRoleValues(roleIds)

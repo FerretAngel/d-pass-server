@@ -8,7 +8,7 @@ import { UserService } from '../user/user.service'
 
 import { AuthService } from './auth.service'
 import { Public } from './decorators/public.decorator'
-import { LoginDto, RegisterDto } from './dto/auth.dto'
+import { LoginDto, LoginWithEmailDto, RegisterDto } from './dto/auth.dto'
 import { LocalGuard } from './guards/local.guard'
 import { LoginToken } from './models/auth.model'
 import { CaptchaService } from './services/captcha.service'
@@ -49,5 +49,14 @@ export class AuthController {
     await this.captchaService.checkRecapcha(dto.token)
     await this.mailerService.checkCode(dto.username,dto.code)
     await this.userService.register(dto)
+  }
+
+  @Post('loginWithEmail')
+  @ApiOperation({ summary: '邮箱登录' })
+  async loginWithEmail(@Body() dto: LoginWithEmailDto, @Ip() ip: string, @Headers('user-agent') ua: string): Promise<LoginToken> {
+    await this.captchaService.checkRecapcha(dto.token)
+    await this.mailerService.checkCode(dto.email,dto.code)
+    const { token, roles } = await this.authService.loginWithEmail(dto.email, ip, ua)
+    return { token: token.accessToken, roles }
   }
 }
