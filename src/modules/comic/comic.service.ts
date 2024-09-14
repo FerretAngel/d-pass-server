@@ -22,9 +22,10 @@ export class ComicService extends BaseService<Comic> {
           }
         }
       },
-      relations:['novel','images'],
+      relations:['novel','images','parent'],
       relationsFindFunc:{
         novel:({id})=>novelService.findOne(id),
+        parent:({id})=>comicRepository.findOne({where:{id}}),
         images:(ids)=>storageService.findMany(ids.map(i=>i.id))
       }
     })

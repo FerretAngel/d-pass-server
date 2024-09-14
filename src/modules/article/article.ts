@@ -2,13 +2,15 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "ty
 import { CommonEntity } from "~/common/entity/common.entity";
 import { Novel } from "../novel/entities/novel.entity";
 import { Role } from "../roles/role.entity";
-import { IsIn, IsNotEmpty, IsString, ValidateIf, ValidateNested } from "class-validator";
+import { IsIn, IsNotEmpty, IsNumber, IsString, ValidateIf, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { IdDto } from "~/common/dto/id.dto";
 import { Optional } from "@nestjs/common";
 
 @Entity('article')
 export class Article extends CommonEntity{
+  @Column({default:0})
+  order:number
   @ManyToOne(()=>Novel)
   @JoinColumn({name:'novel_id'})
   novel:Novel
@@ -38,6 +40,9 @@ export class Article extends CommonEntity{
 
 
 export class ArticleDto{
+  @IsNotEmpty({message:'排序不能为空:order'})
+  @IsNumber()
+  order:number
 
   @IsNotEmpty({ message: '小说不能为空:novel' })
   @ValidateNested()

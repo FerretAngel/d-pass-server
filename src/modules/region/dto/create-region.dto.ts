@@ -6,12 +6,6 @@ import { Storage } from '~/modules/tools/storage/storage.entity';
 import { Novel } from '~/modules/novel/entities/novel.entity';
 import { IdDto } from '~/common/dto/id.dto';
 
-class EntityIdDto{
-  @ApiProperty({ description: 'ID' })
-  @IsNotEmpty()
-  @IsInt()
-  id: number;
-}
 
 export class CreateRegionDto {
   @IsNotEmpty({message:'novel不能为空'})
@@ -25,12 +19,12 @@ export class CreateRegionDto {
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => EntityIdDto)
+  @Type(() => IdDto)
   parent?:Region
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => EntityIdDto)
+  @Type(() => IdDto)
   avatar?:Storage
   
   @IsOptional()

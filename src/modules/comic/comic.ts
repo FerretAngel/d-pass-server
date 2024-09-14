@@ -1,11 +1,12 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, Relation } from "typeorm";
 import { CommonEntity } from "~/common/entity/common.entity";
 import { Novel } from "../novel/entities/novel.entity";
 import { UserEntity } from "../user/user.entity";
 import { Storage } from "../tools/storage/storage.entity";
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsNotEmpty, IsString, ValidateIf, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { IdDto } from "~/common/dto/id.dto";
+import { Optional } from "@nestjs/common";
 
 @Entity()
 export class Comic extends CommonEntity{
@@ -14,8 +15,11 @@ export class Comic extends CommonEntity{
   novel:Relation<Novel>
   @Column()
   title:string
-  @Column()
-  description:string
+  @Column({default:''})
+  description?:string
+  @ManyToOne(() => Comic, { nullable: true })
+  @JoinColumn({ name: 'parent_id' })
+  parent?: Comic
   @ManyToMany(()=>Storage)
   @JoinTable({
     name:'comic_image',
@@ -28,7 +32,7 @@ export class Comic extends CommonEntity{
       referencedColumnName:'id',
     }
   })
-  images:Relation<Storage[]>
+  images?:Relation<Storage[]>
 }
 
 export class ComicDto{
@@ -39,11 +43,17 @@ export class ComicDto{
   @IsNotEmpty({message:'title不能为空'})
   @IsString()
   title:string
+  @ValidateNested()
+  @Type(()=>IdDto)
+  @Optional()
+  parent:Comic
+  @ValidateIf((item)=> typeof item.parent !=='undefined' )
   @IsNotEmpty({message:'description不能为空'})
   @IsString()
-  description:string
+  description?:string
+  @ValidateIf((item)=> typeof item.parent !=='undefined' )
   @IsNotEmpty({message:'images不能为空'})
   @ValidateNested({each:true})
   @Type(()=>IdDto)
-  images:Storage[]
+  images?:Storage[]
 }

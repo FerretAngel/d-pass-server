@@ -6,7 +6,7 @@ import { FindOneOptions, IsNull, Like, Not, Repository } from 'typeorm';
 import { NovelService } from '../novel/novel.service';
 import { RolesService } from '../roles/roles.service';
 
-const select:FindOneOptions<Article>['select'] = ['id','novel','title','content','remark','roles','createdAt']
+const select:FindOneOptions<Article>['select'] = ['id','novel','title','content','remark','roles','createdAt','order']
 
 @Injectable()
 export class ArticleService extends BaseService<Article>{
