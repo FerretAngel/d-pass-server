@@ -94,7 +94,7 @@ export async function saveFile(file: MultipartFile, name: string) {
 }
 
 export async function deleteFile(name: string) {
-  fs.unlink(path.join(__dirname, '../../', 'public', name), () => {
+  fs.unlink(path.join(__dirname, '../../', 'public', name), (error) => {
     // console.log(error);
   })
 }

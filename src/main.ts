@@ -22,7 +22,6 @@ import type { ConfigKeyPaths } from './config'
 import { isDev, isMainProcess } from './global/env'
 import { setupSwagger } from './setup-swagger'
 import { LoggerService } from './shared/logger/logger.service'
-
 declare const module: any
 
 async function bootstrap() {
