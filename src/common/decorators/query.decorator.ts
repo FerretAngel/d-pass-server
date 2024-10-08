@@ -6,8 +6,9 @@ export const QueryPage=createParamDecorator((data: unknown, ctx: ExecutionContex
   const request = ctx.switchToHttp().getRequest();
   // 获取查询参数
   const query = request.query;
-  const {page,pageSize,select,isOr,...params} = query
-  return new QueryDto(page,pageSize,select,isOr,params)
+  const {page,pageSize,select,isOr,novel,...params} = query
+  const paramsObj = novel?{novel:{id:Number(novel)},...params}:params
+  return new QueryDto(page,pageSize,select,isOr,paramsObj)
 })
 
 export class QueryDto<T extends CommonEntity>{
@@ -43,6 +44,8 @@ export class QueryDto<T extends CommonEntity>{
           return {[key]:value}
         case "boolean":
           return {[key]:value?1:0}
+        case "object":
+          return {[key]:value}
         default:
           return null
       }
@@ -70,6 +73,9 @@ export class QueryDto<T extends CommonEntity>{
             break;
           case "boolean":
             res[key] = value?1:0
+            break;
+          case "object":
+            res[key] = value
             break;
         }
       }
