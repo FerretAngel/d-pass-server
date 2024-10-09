@@ -19,7 +19,7 @@ export const QueryPage = createParamDecorator((data: unknown, ctx: ExecutionCont
     // 如果parent是数字，则转换为对象
     params.parent = { id: Number(parent) }
   }
-  return new QueryDto(page, pageSize, select, isOr, params)
+  return new QueryDto(page, pageSize,  isOr,select, params)
 })
 
 export class QueryDto<T extends CommonEntity> {
@@ -37,7 +37,7 @@ export class QueryDto<T extends CommonEntity> {
     return this.pageSize;
   }
 
-  private get andWhere(): FindOptionsWhere<T>[] {
+  private get orWhere(): FindOptionsWhere<T>[] {
     const { params } = this
     // @ts-ignore
     return Object.keys(params).map(key => {
@@ -62,7 +62,7 @@ export class QueryDto<T extends CommonEntity> {
       }
     }).filter(item => item)
   }
-  private get orWhere(): FindOptionsWhere<T> {
+  private get andWhere(): FindOptionsWhere<T> {
     const { params } = this
     const res: any = {}
     for (const key in params) {
