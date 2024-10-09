@@ -6,9 +6,15 @@ export const QueryPage=createParamDecorator((data: unknown, ctx: ExecutionContex
   const request = ctx.switchToHttp().getRequest();
   // 获取查询参数
   const query = request.query;
-  const {page,pageSize,select,isOr,novel,...params} = query
-  const paramsObj = novel?{novel:{id:Number(novel)},...params}:params
-  return new QueryDto(page,pageSize,select,isOr,paramsObj)
+  const {page,pageSize,select,isOr,novel,parent,...params} = query
+  // 将novel和parent转换为对象
+  if(novel){
+    params.novel={id:Number(novel)}
+  }
+  if(parent){
+    params.parent={id:Number(parent)}
+  }
+  return new QueryDto(page,pageSize,select,isOr,params)
 })
 
 export class QueryDto<T extends CommonEntity>{
