@@ -18,7 +18,7 @@ export class RolesService extends BaseService<Role> {
     readonly novelService: NovelService,
   ) {
     super(roleRepository, {
-      relations: ['novel', 'avatar', 'drawing', 'region'],
+      relations: ['novel', 'avatar', 'drawing', 'region','region.avatar'],
       relationsFindFunc: {
         novel: ({ id }) => novelService.findOne(id),
         avatar: ({ id }) => storageService.findOne(id),

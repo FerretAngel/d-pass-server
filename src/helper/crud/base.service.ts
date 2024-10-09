@@ -11,7 +11,7 @@ import { QueryDto } from '~/common/decorators/query.decorator'
 
 interface Config<E>{
   searchParam?:(key:string)=>FindManyOptions<E>,
-  relations: (keyof E)[],
+  relations:Array<keyof E | (string & {})>,
   relationsFindFunc: {
     [K in keyof E]?: (param: E[K]) => Promise<E[K]>
   }
