@@ -37,6 +37,7 @@ import { ComicModule } from './modules/comic/comic.module';
 import { ArticleModule } from './modules/article/article.module';
 import { InfoModule } from './modules/info/info.module';
 import { AppController } from './app.controller'
+import { AvatarModule } from './modules/avatar/avatar.module';
 
 @Module({
   imports: [
@@ -104,6 +105,8 @@ import { AppController } from './app.controller'
     ArticleModule,
 
     InfoModule,
+
+    AvatarModule,
 
   ],
   controllers:[AppController],

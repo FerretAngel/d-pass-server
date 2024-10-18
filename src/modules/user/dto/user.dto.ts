@@ -24,6 +24,7 @@ import { PagerDto } from '~/common/dto/pager.dto'
 import { Region } from '~/modules/region/entities/region.entity'
 import { DictItemEntity } from '~/modules/system/dict-item/dict-item.entity'
 import { UserSex } from '../user.entity'
+import { Storage } from '~/modules/tools/storage/storage.entity'
 
 export class UserDto {
   @ApiProperty({ description: '头像' })
@@ -92,8 +93,9 @@ export class UserDto {
 
 export class UserUpdateSelfDto {
   @IsOptional()
-  @IsString()
-  avatar?:string
+  @ValidateNested()
+  @Type(()=>IdDto)
+  avatar?:Storage
 
   @ApiProperty({ description: '呢称', example: 'admin' })
   @IsOptional()

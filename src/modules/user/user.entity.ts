@@ -19,6 +19,7 @@ import { DeptEntity } from '~/modules/system/dept/dept.entity'
 import { RoleEntity } from '~/modules/system/role/role.entity'
 import { Region } from '../region/entities/region.entity'
 import { DictItemEntity } from '../system/dict-item/dict-item.entity'
+import { Storage } from '../tools/storage/storage.entity'
 
 export enum UserSex{
   male,
@@ -88,4 +89,8 @@ export class UserEntity extends CommonEntity {
   @ManyToOne(()=>DictItemEntity)
   @JoinColumn({name:'surnamed_id'})
   surnamed:DictItemEntity
+
+  @ManyToOne(()=>Storage)
+  @JoinColumn({name:'avatar_id'})
+  avatarImage:Storage
 }

@@ -11,6 +11,7 @@ import { UserEntity } from './user.entity'
 import { UserService } from './user.service'
 import { DictItemModule } from '../system/dict-item/dict-item.module'
 import { Region } from '../region/entities/region.entity'
+import { StorageModule } from '../tools/storage/storage.module'
 
 const providers = [UserService]
 
@@ -21,6 +22,7 @@ const providers = [UserService]
     MenuModule,
     ParamConfigModule,
     DictItemModule,
+    StorageModule
   ],
   controllers: [UserController],
   providers: [...providers],

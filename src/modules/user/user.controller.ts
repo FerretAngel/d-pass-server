@@ -61,6 +61,14 @@ export class UserController {
   async updateSelf(@AuthUser() {uid:id}: IAuthUser, @Body() dto: UserUpdateSelfDto): Promise<void> {
     await this.userService.updateSelf(id, dto)
   }
+
+  @Get('/self')
+  @ApiOperation({ summary: '获取当前用户信息' })
+  @Perm(permissions.READ)
+  async getMe(@AuthUser() {uid:id}: IAuthUser) {
+    return this.userService.getMe(id)
+  }
+
   @Put(':id')
   @ApiOperation({ summary: '更新用户' })
   @Perm(permissions.UPDATE)

@@ -33,6 +33,7 @@ import { RegionService } from '../region/region.service'
 import { DictItemService } from '../system/dict-item/dict-item.service'
 import { Region } from '../region/entities/region.entity'
 import { RoleService } from '../system/role/role.service'
+import { StorageService } from '../tools/storage/storage.service'
 
 @Injectable()
 export class UserService {
@@ -49,7 +50,8 @@ export class UserService {
     @InjectRepository(Region)
     private readonly RegionRepository: Repository<Region>,
     readonly dictItemService:DictItemService,
-    readonly roleService:RoleService
+    readonly roleService:RoleService,
+    readonly storageService:StorageService
   ) {}
 
   async findUserById(id: number): Promise<UserEntity | undefined> {
@@ -233,6 +235,9 @@ export class UserService {
   }
 
 
+  /**
+   * 更新个人信息
+   */
   async updateSelf(id:number,update:UserUpdateSelfDto){
     const user = await this.userRepository.findOne({
       where:{
@@ -240,7 +245,7 @@ export class UserService {
       }
     })
     if(!user) throw new BadRequestException('用户不存在')
-    const {region,surnamed,...updateData} = update
+    const {region,surnamed,avatar,...updateData} = update
     if(region){
       const _region = await this.RegionRepository.findOne({
         where:{id:region.id}
@@ -251,10 +256,28 @@ export class UserService {
       const _surnamed = await this.dictItemService.findOne(surnamed.id)
       _surnamed && (user.surnamed=_surnamed)
     }
+    if(avatar){
+      const _avatar = await this.storageService.findOne(avatar.id)
+      _avatar && (user.avatarImage=_avatar)
+      _avatar && (user.avatar=_avatar.path)
+    }
     await this.userRepository.update(id,{
       ...user,
       ...updateData
     })
+  }
+
+  /**
+   * 获取当前用户信息
+   */
+  async getMe(id:number){
+    const user = await this.userRepository.findOne({
+      where:{
+        id,
+      },
+      relations:['region','surnamed','dept','avatarImage']
+    })
+    return user
   }
 
   /**
