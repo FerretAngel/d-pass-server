@@ -4,6 +4,7 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   ArrayNotEmpty,
+  IsDate,
   IsDateString,
   IsEmail,
   IsIn,
@@ -116,7 +117,7 @@ export class UserUpdateSelfDto {
   region?:Region
 
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   birthday?:Date
 
   @IsOptional()
