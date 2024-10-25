@@ -20,6 +20,7 @@ import { RoleEntity } from '~/modules/system/role/role.entity'
 import { Region } from '../region/entities/region.entity'
 import { DictItemEntity } from '../system/dict-item/dict-item.entity'
 import { Storage } from '../tools/storage/storage.entity'
+import { Card } from '../card/card'
 
 export enum UserSex{
   male,
@@ -93,4 +94,16 @@ export class UserEntity extends CommonEntity {
   @ManyToOne(()=>Storage)
   @JoinColumn({name:'avatar_id'})
   avatarImage:Storage
+
+  @ManyToMany(()=>Card)
+  @JoinTable({
+    name:'sys_user_cards',
+    joinColumn:{name:'user_id',referencedColumnName:'id'},
+    inverseJoinColumn:{name:'card_id',referencedColumnName:'id'}
+  })
+  cards:Relation<Card[]>
+
+  @ManyToOne(()=>Card)
+  @JoinColumn({name:'current_card_id'})
+  currentCard:Card
 }

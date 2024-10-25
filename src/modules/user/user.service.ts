@@ -34,6 +34,7 @@ import { DictItemService } from '../system/dict-item/dict-item.service'
 import { Region } from '../region/entities/region.entity'
 import { RoleService } from '../system/role/role.service'
 import { StorageService } from '../tools/storage/storage.service'
+import { CardService } from '../card/card.service'
 
 @Injectable()
 export class UserService {
@@ -51,7 +52,8 @@ export class UserService {
     private readonly RegionRepository: Repository<Region>,
     readonly dictItemService:DictItemService,
     readonly roleService:RoleService,
-    readonly storageService:StorageService
+    readonly storageService:StorageService,
+    readonly cardService:CardService
   ) {}
 
   async findUserById(id: number): Promise<UserEntity | undefined> {
@@ -245,7 +247,7 @@ export class UserService {
       }
     })
     if(!user) throw new BadRequestException('用户不存在')
-    const {region,surnamed,avatar,...updateData} = update
+    const {region,surnamed,avatar,currentCard,...updateData} = update
     if(region){
       const _region = await this.RegionRepository.findOne({
         where:{id:region.id}
@@ -261,6 +263,10 @@ export class UserService {
       _avatar && (user.avatarImage=_avatar)
       _avatar && (user.avatar=_avatar.path)
     }
+    if(currentCard){
+      const _currentCard = await this.cardService.findOne(currentCard.id)
+      _currentCard && (user.currentCard=_currentCard)
+    }
     await this.userRepository.update(id,{
       ...user,
       ...updateData
@@ -275,9 +281,38 @@ export class UserService {
       where:{
         id,
       },
-      relations:['region','surnamed','dept','avatarImage']
+      relations:['region','surnamed','dept','avatarImage','cards','cards.face','cards.back','currentCard','currentCard.face','currentCard.back']
     })
     return user
+  }
+  /**
+   * 领取卡片
+   */
+  async receiveCard(id:number,cardId:number){
+    const user = await this.userRepository.findOne({
+      where:{
+        id,
+      },
+      relations:['cards']
+    })
+    if(user.cards.find(v=>v.id===cardId)) throw new BadRequestException('已领取过该卡片')
+    if(!user) throw new BadRequestException('用户不存在')
+    const card = await this.cardService.findOne(cardId)
+    if(!card) throw new BadRequestException('卡片不存在')
+    user.cards.push(card)
+    await this.userRepository.save(user)
+  }
+  /**
+   * 删除卡片
+   */
+  async deleteCard(id:number,cardId:number){
+    const user = await this.userRepository.findOne({
+      where:{id},
+      relations:['cards']
+    })
+    if(!user) throw new BadRequestException('用户不存在')
+    user.cards = user.cards.filter(v=>v.id!==cardId)
+    await this.userRepository.save(user)
   }
 
   /**

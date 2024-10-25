@@ -25,6 +25,7 @@ import { Region } from '~/modules/region/entities/region.entity'
 import { DictItemEntity } from '~/modules/system/dict-item/dict-item.entity'
 import { UserSex } from '../user.entity'
 import { Storage } from '~/modules/tools/storage/storage.entity'
+import { Card } from '~/modules/card/card'
 
 export class UserDto {
   @ApiProperty({ description: '头像' })
@@ -122,6 +123,10 @@ export class UserUpdateSelfDto {
   @IsIn([UserSex.male,UserSex.women])
   sex?:UserSex
 
+  @IsOptional()
+  @ValidateNested()
+  @Type(()=>IdDto)
+  currentCard?:Card
 }
 
 export class UserUpdateDto extends PartialType(UserDto) {}

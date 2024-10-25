@@ -64,9 +64,23 @@ export class UserController {
 
   @Get('/self')
   @ApiOperation({ summary: '获取当前用户信息' })
-  @Perm(permissions.READ)
+  @Perm(permissions.UPDATE_SELF)
   async getMe(@AuthUser() {uid:id}: IAuthUser) {
     return this.userService.getMe(id)
+  }
+
+  @Put('/card/:cardId')
+  @ApiOperation({ summary: '领取卡片' })
+  @Perm(permissions.UPDATE_SELF)
+  async receiveCard(@AuthUser() {uid:id}: IAuthUser,@Param('cardId') cardId:string){
+    await this.userService.receiveCard(id,+cardId)
+  }
+
+  @Delete('/card/:cardId')
+  @ApiOperation({ summary: '删除卡片' })
+  @Perm(permissions.UPDATE_SELF)
+  async deleteCard(@AuthUser() {uid:id}: IAuthUser,@Param('cardId') cardId:string){
+    await this.userService.deleteCard(id,+cardId)
   }
 
   @Put(':id')
