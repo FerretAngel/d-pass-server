@@ -19,6 +19,17 @@ export const QueryPage = createParamDecorator((data: unknown, ctx: ExecutionCont
     // 如果parent是数字，则转换为对象
     params.parent = { id: Number(parent) }
   }
+  // 如果是json字符串(以{开头}结尾)，则转换为对象
+  for (const key in params) {
+    const value = params[key]
+    if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
+      try {
+        params[key] = JSON.parse(value)
+      } catch (error) {
+        params[key] = value
+      }
+    }
+  }
   return new QueryDto(page, pageSize,  isOr,select, params)
 })
 
