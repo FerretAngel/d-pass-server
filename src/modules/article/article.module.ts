@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Article } from './article';
 import { NovelModule } from '../novel/novel.module';
 import { RolesModule } from '../roles/roles.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Article]),NovelModule,RolesModule],
+  imports:[TypeOrmModule.forFeature([Article]),NovelModule,RolesModule,AuthModule],
   controllers: [ArticleController],
   providers: [ArticleService],
   exports:[ArticleService]
