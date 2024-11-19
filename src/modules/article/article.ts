@@ -72,3 +72,9 @@ export class ArticleDto{
   @Type(()=>IdDto)
   roles?:Role[]
 }
+
+export class ArticleNextDto{
+  @IsNotEmpty()
+  @IsString()
+  token:string
+}

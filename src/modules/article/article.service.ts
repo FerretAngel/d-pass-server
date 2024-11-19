@@ -72,8 +72,6 @@ export class ArticleService extends BaseService<Article>{
           parent:item.parent ? {id:item.parent.id} : IsNull()
         }
       ],
-      relations:relations,
-      select:select,
       order:{
         order:'ASC',
         createdAt:'ASC'
@@ -96,8 +94,6 @@ export class ArticleService extends BaseService<Article>{
           parent:item.parent ? {id:item.parent.id} : IsNull()
         }
       ],
-      relations:relations,
-      select:select,
       order:{
         order:'DESC',
         createdAt:'DESC'
@@ -110,8 +106,6 @@ export class ArticleService extends BaseService<Article>{
       where:{
         parent:{id}
       },
-      relations:this.param.relations as string[],
-      select,
       order:{
         order:'ASC',
         createdAt:'ASC'
@@ -121,8 +115,6 @@ export class ArticleService extends BaseService<Article>{
   async getLastOne(id:number){
     return this.articleRepository.findOne({
       where:{parent:{id}},
-      relations:this.param.relations as string[],
-      select,
       order:{order:'DESC',createdAt:'DESC'}
     })
   }

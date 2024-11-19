@@ -5,7 +5,7 @@ dist
 .cache
 .history
 .vercel/
-
+dist.zip
 .turbo
 .local
 
