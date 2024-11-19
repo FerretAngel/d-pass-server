@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { InfoService } from './info.service';
 import { InfoController } from './info.controller';
 import { Info } from './info';
@@ -9,7 +9,7 @@ import { RolesModule } from '../roles/roles.module';
 import { StorageModule } from '../tools/storage/storage.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Info]),NovelModule,RolesModule,DictItemModule,StorageModule],
+  imports:[TypeOrmModule.forFeature([Info]),NovelModule,forwardRef(()=>RolesModule),DictItemModule,StorageModule],
   controllers: [InfoController],
   providers: [InfoService],
   exports:[InfoService]

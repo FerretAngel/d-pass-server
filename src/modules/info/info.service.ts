@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { BaseService } from '~/helper/crud/base.service';
 import { Info } from './info';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,6 +17,7 @@ export class InfoService extends BaseService<Info>{
     @InjectRepository(Info)
     readonly articleRepository:Repository<Info>,
     readonly novelService:NovelService,
+    @Inject(forwardRef(() => RolesService))
     readonly roleService:RolesService,
     readonly dictItemService:DictItemService,
     readonly storageService:StorageService
@@ -48,5 +49,18 @@ export class InfoService extends BaseService<Info>{
     if (!item)
       throw new NotFoundException('未找到该记录')
     return item
+  }
+
+  /**
+   * 获取角色id相关文章
+   */
+  async findRoleArticle(id:number,maxCount:number = 10){
+    return this.articleRepository.find({
+      where:{roles:{id}},
+      take:maxCount,
+      order:{
+        createdAt:'DESC'
+      }
+    })
   }
 }

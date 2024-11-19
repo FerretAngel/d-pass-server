@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Inject } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IdParam } from '~/common/decorators/id-param.decorator';
 import { AuthUser } from '../auth/decorators/auth-user.decorator';
@@ -8,6 +8,8 @@ import { CreateRoleDto as Dto } from './dto/create-role.dto';
 import { QueryDto, QueryPage } from '~/common/decorators/query.decorator';
 import { Role } from './role.entity';
 import { definePermission, Perm } from '../auth/decorators/permission.decorator';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 export const permissions = definePermission('role', {
   LIST: 'list',
@@ -19,7 +21,9 @@ export const permissions = definePermission('role', {
 @Controller('role')
 @ApiTags('role-角色模块')
 export class RolesController {
-  constructor(private readonly service: Service) {}
+  constructor(private readonly service: Service,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
   @Post()
   @Perm(permissions.CREATE)
@@ -38,8 +42,17 @@ export class RolesController {
   @Get(':id')
   @Perm(permissions.READ)
   @ApiOperation({summary:'查询详情'})
-  findOne(@IdParam() id: number) {
-    return this.service.findOne(id);
+  async findOne(@IdParam() id: number) {
+    const cacheKey = `role_${id}`
+    const cacheData = await this.cacheManager.get(cacheKey)
+    if(cacheData){
+      return cacheData
+    }
+    const data = await this.service.findOneAndRelations(id)
+    this.cacheManager.set(cacheKey,data,30000).catch(err=>{
+      console.error(`设置缓存失败:${err}`)
+    })
+    return data
   }
 
   @Patch(':id')

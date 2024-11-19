@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { BaseService } from '~/helper/crud/base.service';
 import { Article } from './article';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +14,8 @@ export class ArticleService extends BaseService<Article>{
     @InjectRepository(Article)
     readonly articleRepository:Repository<Article>,
     readonly novelService:NovelService,
-    readonly roleService:RolesService
+    @Inject(forwardRef(() => RolesService))
+    readonly rolesService:RolesService
   ){
     super(articleRepository,{
       searchParam(key) {
@@ -29,7 +30,7 @@ export class ArticleService extends BaseService<Article>{
       relations:['novel','roles','parent'],
       relationsFindFunc:{
         novel:({id})=>novelService.findOne(id),
-        roles:(items)=>roleService.findMany(items.map(item=>item.id)),
+        roles:(items)=>rolesService.findMany(items.map(item=>item.id)),
         parent:({id})=>articleRepository.findOne({where:{id}}),
       }
     })
@@ -154,5 +155,19 @@ export class ArticleService extends BaseService<Article>{
     }
   
     return nextArticle;
+  }
+
+  /**
+   * 获取角色id相关文章
+   */
+  async findRoleArticle(id:number,maxCount:number = 10){
+    return this.articleRepository.find({
+      where:{roles:{id}},
+      take:maxCount,
+      order:{
+        order:'DESC',
+        createdAt:'DESC'
+      }
+    })
   }
 }
