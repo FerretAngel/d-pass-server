@@ -1,6 +1,77 @@
-<p>[D-pass]梦行者通道-验证码</p>
-<p>尊敬的测梦师同学，您好！</p>
-<p>经过梦神的解密，您本次将要对接的梦境，其梦行者通道的通行码为：</p>
-<h2>{{code}}</h2>
-<p>该通道将在10分钟的窗口期后关闭，请尽快通过，切记不可将通行码泄露与外人，以免梦境遭受难以预测的攻击。</p>
-<font color='grey'>本邮件由系统自动发出，请勿回复，感谢您的配合。</font>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>梦行者通道验证码</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+      font-family: "微软雅黑", sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e9e9e9;
+    }
+    .header p {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0;
+      color: #333;
+    }
+    .content {
+      margin-top: 20px;
+      line-height: 1.6;
+      color: #333;
+      font-size: 16px;
+    }
+    .code-section {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .code-section h2 {
+      background-color: #f8f8f8;
+      padding: 15px;
+      border-radius: 4px;
+      color: #1d9ce1;
+      margin: 0;
+      letter-spacing: 3px;
+      font-size: 28px;
+    }
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <p>[D-pass] 梦行者通道 - 验证码</p>
+  </div>
+  <div class="content">
+    <p>尊敬的测梦师同学，您好！</p>
+    <p>经过梦神的解密，您本次将要对接的梦境，其梦行者通道的通行码为：</p>
+    <div class="code-section">
+      <h2>{{code}}</h2>
+    </div>
+    <p>该通道将在10分钟的窗口期后关闭，请尽快通过，切记不可将通行码泄露与外人，以免梦境遭受难以预测的攻击。</p>
+  </div>
+  <div class="footer">
+    本邮件由系统自动发出，请勿回复，感谢您的配合。
+  </div>
+</div>
+</body>
+</html>
