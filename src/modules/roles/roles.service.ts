@@ -33,6 +33,7 @@ export class RolesService extends BaseService<Role> {
       },
       searchParam(key) {
         return {
+          relations:['avatar'],
           where: [
             {
               name: Like(`%${key}%`),
