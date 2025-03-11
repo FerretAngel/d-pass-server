@@ -38,6 +38,8 @@ import { ArticleModule } from './modules/article/article.module';
 import { InfoModule } from './modules/info/info.module';
 import { AppController } from './app.controller'
 import { AvatarModule } from './modules/avatar/avatar.module';
+import { GalleryModule } from './modules/gallery/gallery.module';
+import { GalleryImageModule } from './modules/gallery-image/gallery-image.module';
 
 @Module({
   imports: [
@@ -107,6 +109,10 @@ import { AvatarModule } from './modules/avatar/avatar.module';
     InfoModule,
 
     AvatarModule,
+
+    GalleryModule,
+
+    GalleryImageModule,
 
   ],
   controllers:[AppController],

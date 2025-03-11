@@ -106,6 +106,7 @@ export class QueryDto<T extends CommonEntity> {
   }
 
   get where(): FindOptionsWhere<T> | FindOptionsWhere<T>[] {
+    if (!this.params) return undefined
     const { isOr } = this
     return isOr ? this.orWhere : this.andWhere
   }
