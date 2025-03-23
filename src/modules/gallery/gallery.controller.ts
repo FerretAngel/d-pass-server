@@ -37,7 +37,7 @@ export class GalleryController {
   @ApiOperation({summary:'查询详情'})
   @Perm(permissions.READ)
   findOne(@IdParam() id: number) {
-    return this.service.findOne(id);
+    return this.service.getItemOrder(id);
   }
 
   @Patch(':id')

@@ -40,4 +40,12 @@ export class GalleryService extends BaseService<Gallery> {
     })
     return {items:list,...rest}
   }
+
+  async getItemOrder(id:number){
+    const item = await this.findOne(id)
+    return {
+      ...item,
+      images:item.images.sort((a,b)=>a.sort-b.sort)
+    }
+  }
 }
