@@ -31,4 +31,19 @@ export class GalleryImageService extends BaseService<GalleryImage> {
       await Promise.all(promises);
     });
   }
+  async getTopImage(novelId:number){
+    return await this.galleryImageRepository.findAndCount({
+      where:{
+        top:true,
+        novel:{
+          id:novelId
+        }
+      },
+      relations:['image'],
+      order:{
+        updatedAt:'DESC'
+      },
+      take:3
+    })
+  }
 }

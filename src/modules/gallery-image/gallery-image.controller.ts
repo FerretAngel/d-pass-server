@@ -53,4 +53,11 @@ export class GalleryImageController {
   async delete(@IdParam() id: number) {
     return this.galleryImageService.delete(id);
   }
+
+  @Get('top-image/:id')
+  @ApiOperation({summary:'获取小说置顶图片'})
+  @Perm(permissions.READ)
+  async getTopImage(@IdParam() novelId:number){
+    return this.galleryImageService.getTopImage(novelId);
+  }
 }
