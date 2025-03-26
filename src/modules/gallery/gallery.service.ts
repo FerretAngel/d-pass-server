@@ -26,7 +26,7 @@ export class GalleryService extends BaseService<Gallery> {
     })
   }
   async updateOrder(id:number,entity:Partial<Gallery>){
-    const novel = await this.novelService.findOne(entity.novel.id)
+    const {novel} = await this.findOne(id)
     await this.galleryImageService.updateOrder(entity.images,novel)
     return this.update(id,entity)
   }
