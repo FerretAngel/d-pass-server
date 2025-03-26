@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BaseService } from '~/helper/crud/base.service'; 
 import { Gallery } from './gallery';
 import { Repository } from 'typeorm';
@@ -26,18 +26,31 @@ export class GalleryService extends BaseService<Gallery> {
     })
   }
   async updateOrder(id:number,entity:Partial<Gallery>){
-    await this.galleryImageService.updateOrder(entity.images)
+    const novel = await this.novelService.findOne(entity.novel.id)
+    await this.galleryImageService.updateOrder(entity.images,novel)
     return this.update(id,entity)
   }
 
-  async getListOrder(query:QueryDto<Gallery>){
-    const {items,...rest} = await this.findAll(query)
-    const list = items.map(item=>{
-      return {
-        ...item,
-        images:item.images.sort((a,b)=>a.sort-b.sort)
-      }
+
+  async queryList(query:QueryDto<Gallery>){
+    const [list,total] = await this.galleryRepository.findAndCount({
+      take: query.take,
+      skip: query.skip,
+      where: query.where,
+      relations: ['cover'],
     })
-    return {items:list,...rest}
+    return query.getReturn(list, total)
+  }
+
+  async queryItem(id:number){
+    const item = await this.galleryRepository.findOne({
+      where:{id},
+      relations:['cover','images','images.image'],
+    })
+    if(!item) throw new NotFoundException('未找到该记录')
+    return {
+      ...item,
+      images:item.images.sort((a,b)=>a.sort-b.sort)
+    }
   }
 }

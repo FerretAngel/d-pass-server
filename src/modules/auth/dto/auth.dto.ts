@@ -16,6 +16,7 @@ export class LoginDto {
 
   @ApiProperty({ description: '验证码标识' })
   @IsString()
+  @IsOptional()
   token:string
   // captchaId: string
 

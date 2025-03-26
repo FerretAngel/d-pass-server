@@ -4,9 +4,13 @@ import { Storage } from "../tools/storage/storage.entity";
 import { IsBoolean, IsNumber, IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { IdDto } from "~/common/dto/id.dto";
+import { Novel } from "../novel/entities/novel.entity";
 
 @Entity()
 export class GalleryImage extends CommonEntity{
+  @ManyToOne(()=>Novel)
+  @JoinColumn({name:'novel_id'})
+  novel:Relation<Novel>
   @ManyToOne(()=>Storage)
   @JoinColumn({name:'image_id'})
   image:Relation<Storage>

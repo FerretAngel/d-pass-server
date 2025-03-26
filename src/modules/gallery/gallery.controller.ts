@@ -30,14 +30,14 @@ export class GalleryController {
   @ApiOperation({summary:'列表查询'})
   @Perm(permissions.LIST)
   findAll(@QueryPage() query:QueryDto<Gallery>) {
-    return this.service.getListOrder(query);
+    return this.service.queryList(query);
   }
 
   @Get(':id')
   @ApiOperation({summary:'查询详情'})
   @Perm(permissions.READ)
   findOne(@IdParam() id: number) {
-    return this.service.findOne(id);
+    return this.service.queryItem(id);
   }
 
   @Patch(':id')
