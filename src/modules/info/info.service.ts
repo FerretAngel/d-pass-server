@@ -23,7 +23,7 @@ export class InfoService extends BaseService<Info>{
     readonly storageService:StorageService
   ){
     super(articleRepository,{
-      relations:['novel','roles','tags','cover'],
+      relations:['novel','roles','roles.avatar','tags','cover'],
       relationsFindFunc:{
         novel:({id})=>novelService.findOne(id),
         roles:(items)=>roleService.findMany(items.map(item=>item.id)),
