@@ -27,7 +27,7 @@ export class ArticleService extends BaseService<Article>{
           select:['id','title','content','remark','createdAt'],
         }
       },
-      relations:['novel','roles','parent'],
+      relations:['novel','roles','roles.avatar','parent'],
       relationsFindFunc:{
         novel:({id})=>novelService.findOne(id),
         roles:(items)=>rolesService.findMany(items.map(item=>item.id)),
