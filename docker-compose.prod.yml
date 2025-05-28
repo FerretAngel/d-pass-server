@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  nest-admin-server:
-    image: buqiyuan/nest-admin-server:stable
-    container_name: nest-admin-server
-    pull_policy: always
+  dpass:
+    image: dpass:20250528
+    container_name: dpass-server
+    pull_policy: never
     restart: always
     env_file:
       - .env
@@ -14,8 +14,8 @@ services:
     ports:
       - '${APP_PORT}:${APP_PORT}'  
     networks:
-      - nest_admin_net
+      - dpass_net
 
 networks:
-  nest_admin_net:
-    name: nest_admin_net
+  dpass_net:
+    name: dpass_net
