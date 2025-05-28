@@ -17,7 +17,10 @@ services:
       - '${APP_PORT}:${APP_PORT}'  
     networks:
       - dpass_net
+      - 1panel-network
 
 networks:
   dpass_net:
     name: dpass_net
+  1panel-network:
+    external: true
