@@ -2,7 +2,7 @@ version: '3'
 
 services:
   dpass:
-    image: dpass:20250528
+    image: dpass:latest
     container_name: dpass-server
     pull_policy: never
     restart: always
@@ -11,6 +11,8 @@ services:
       - .env.production
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+    volumes:
+      - ./public:/api/public
     ports:
       - '${APP_PORT}:${APP_PORT}'  
     networks:
